@@ -5,7 +5,7 @@ import { IoIosWarning } from "react-icons/io";
 import MetaCard from "../components/animals/MetaCard";
 import { use, useState } from "react";
 import { TotalAnimalsContext } from "../contexts/all.context";
-import Card from "../components/animals/card";
+import Card from "../components/animals/Card";
 
 const META_ANIMAL_DETAILS = [
   {

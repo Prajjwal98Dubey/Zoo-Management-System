@@ -1,9 +1,12 @@
 import { CiCalendar } from "react-icons/ci";
 import { CiLocationOn } from "react-icons/ci";
 import { CiHeart } from "react-icons/ci";
-
+import { createPortal } from 'react-dom';
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
+
+import Modal from "./Modal";
+import { useState } from "react";
 
 const healthColors = {
   excellent: "from-green-600 to-green-700 ",
@@ -21,7 +24,12 @@ const categoryEmojis = {
   fish: "🐠",
 };
 
+
+
+
+
 const Card = ({ details }) => {
+  const [showModal, setShowModal] = useState(false)
   return (
     <div className="shadow-sm w-full h-full px-3 py-2 shadow-gray-300 border border-gray-200 text-sm bg-white rounded-[15px]">
       <div className="flex justify-between pt-3">
@@ -36,9 +44,8 @@ const Card = ({ details }) => {
           </div>
         </div>
         <div
-          className={`w-[60px] h-[25px] flex justify-center items-center bg-gradient-to-r ${
-            healthColors[details.healthStatus.toLowerCase()]
-          } rounded-[20px] text-white text-[10px] font-semibold`}
+          className={`w-[60px] h-[25px] flex justify-center items-center bg-gradient-to-r ${healthColors[details.healthStatus.toLowerCase()]
+            } rounded-[20px] text-white text-[10px] font-semibold`}
         >
           {details.healthStatus}
         </div>
@@ -75,7 +82,7 @@ const Card = ({ details }) => {
       <div className="flex justify-center py-3">
         <div className="w-1/2 px-4">
           <button
-            // onClick={() => setShowModal(true)}
+            onClick={() => setShowModal(true)}
             className="w-full flex bg-[hsl(40,20%,97%)] px-4 py-2 justify-center items-center rounded-[10px] hover:bg-amber-400"
           >
             <div className="flex justify-center items-center text-lg px-1">
@@ -85,6 +92,10 @@ const Card = ({ details }) => {
               View
             </div>
           </button>
+           {showModal && createPortal(
+        <Modal details={details} onClose={()=> {setShowModal(false)}}/>,
+        document.body
+      )}
         </div>
         <div className="w-1/2 px-4">
           <button className="w-full flex bg-green-500 hover:bg-green-600 text-white px-4 py-2 justify-center items-center rounded-[10px]">
