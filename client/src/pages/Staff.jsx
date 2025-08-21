@@ -1,8 +1,8 @@
+import MetaStaff from "../components/staff/MetaStaff";
+
 const Staff = () => {
   return (
-    <div className="flex justify-center items-center font-bold text-3xl ">
-      Staff
-    </div>
+   <MetaStaff/>
   );
 };
 
