@@ -1,6 +1,8 @@
 import { nanoid } from "nanoid";
 import zooPool from "../db/connection.js";
 
+let allowedAnimalStatus = ["excellent", "good", "fair", "poor", "critical"];
+
 export const addAnimal = async (req, res) => {
   const {
     animalName,
@@ -131,5 +133,20 @@ export const editAnimal = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Some server error." });
+  }
+};
+export const getCriticalHealthAnimals = async (req, res) => {
+  const { animalStatus } = req.query;
+  if (allowedAnimalStatus.indexOf(animalStatus.toLowerCase()) == -1)
+    return res.status(200).json({ message: "this status does not exists." });
+  try {
+    const result = await zooPool.query(
+      "SELECT animal_name,health_status,enclosure,species FROM animals WHERE health_status = $1",
+      [animalStatus.toLowerCase()]
+    );
+    return res.status(200).json({ details: result.rows });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "some server error." });
   }
 };

@@ -29,3 +29,26 @@ create table visitors(
     number_of_tickets int not null,
     created_at timestamp default current_timestamp
 )
+
+
+CREATE TABLE feeding_schedules (
+  id VARCHAR(255) PRIMARY KEY,
+  animal_id VARCHAR(255) NOT NULL REFERENCES animals(animal_id),
+  animal_name TEXT NOT NULL,
+  feeding_time TIMESTAMP NOT NULL,
+  food_type TEXT NOT NULL,
+  amount TEXT NOT NULL,
+  staff_id VARCHAR(255) NOT NULL REFERENCES staff(staff_id),
+  staff_name TEXT NOT NULL,
+  completed BOOLEAN DEFAULT FALSE,
+  notes TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+create table recent_activity(
+    id varchar(255) primary key,
+    note varchar(255) not null,
+    created_at default current_timestamp
+)
