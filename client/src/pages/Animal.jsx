@@ -56,7 +56,7 @@ const Animal = () => {
         </div>
       </div>
       <div className="w-full">
-        <SearchFilter />
+        <SearchFilter componentname={"Animal"} />
       </div>
       <div className="flex my-6">
         {META_ANIMAL_DETAILS.map((details) => (
