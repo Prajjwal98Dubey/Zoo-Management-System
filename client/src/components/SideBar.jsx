@@ -34,7 +34,7 @@ const FIELDS = [
 const SideBar = () => {
   const { category, setCategory } = use(SelectedCategoryContext);
   return (
-    <div className="w-1/6 border border-transparent border-r-green-300 min-h-screen px-2">
+    <div className="w-full shadow-lg shadow-gray-400 min-h-screen px-2 relative">
       <div className="text-xl font-bold text-[#313131] font-mono flex justify-center items-center py-6">
         <div className="px-3 text-white bg-green-700 py-3 rounded-[30px]">
           <BsTreeFill />
