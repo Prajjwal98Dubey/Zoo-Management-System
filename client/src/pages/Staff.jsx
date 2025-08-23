@@ -15,6 +15,19 @@ function StaffList() {
   );
 }
 
+function Header(){
+  return (
+    <>
+    <h1>STAFF DASHBOARD</h1>
+    <button>add staff + </button>
+    
+    
+    </>
+  )
+}
+
+
+
 const Staff = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { staffList, setStaffList } = use(TotalStaff);
@@ -44,5 +57,13 @@ const Staff = () => {
       )}
     </>
   );
+      <Header></Header>
+      <SearchFilter componentname={"Staff"} positionClasses='mt-4'></SearchFilter>
+      <MetaStaff ></MetaStaff>
+      <StaffList></StaffList>
+
+
+      </>
+      );
 };
 export default Staff;
