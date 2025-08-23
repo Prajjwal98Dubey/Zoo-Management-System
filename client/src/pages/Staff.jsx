@@ -1,10 +1,12 @@
 import MetaStaff from "../components/staff/MetaStaff";
+import Addstaffmodal from "../components/staff/Addstaffmodal";
 import SearchFilter from "../components/animals/SearchFilter";
 import StaffCard from "../components/staff/StaffCard";
 import { TotalStaff } from "../contexts/all.context";
 import { use, useEffect, useState } from "react";
 import { GET_STAFF } from "../apis/local.apis";
 import { LuUsers } from "react-icons/lu";
+import React from "react";
 
 import EmptyListCard from "../components/EmptyListCard";
 function StaffList({ list }) {
@@ -17,17 +19,25 @@ function StaffList({ list }) {
   );
 }
 
-function Header() {
+function Header({ onAddStaff }) {
   return (
     <>
-      <h1>STAFF DASHBOARD</h1>
-      <button>add staff + </button>
+      <div className="flex flex-row justify-between items-center px-6 mt-6">
+        <h1 className="font-bold text-2xl">STAFF DASHBOARD</h1>
+        <button
+          className="bg-green-600 font-bold hover:bg-green-700 cursor-pointer rounded-md px-3 py-2 text-white text-sm"
+          onClick={onAddStaff}
+        >
+          add staff +{" "}
+        </button>
+      </div>
     </>
   );
 }
 
 const Staff = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isAddStaff, setIsAddStaff] = useState(false);
   const { staffList, setStaffList } = use(TotalStaff);
   const [filteredStaffList, setFilteredStaffList] = useState(staffList);
   useEffect(() => {
@@ -41,8 +51,12 @@ const Staff = () => {
     };
     if (staffList.length == 0) getStaffDetails();
   }, []);
+  const handleAddStaffClick = () => {
+    setIsAddStaff(true);
+  };
   return (
     <>
+      <Header onAddStaff={handleAddStaffClick}></Header>
       <SearchFilter
         componentname={"staff by name or profession"}
         positionClasses="mt-4"
@@ -50,6 +64,9 @@ const Staff = () => {
         setFilteredList={setFilteredStaffList}
         originalList={staffList}
       ></SearchFilter>
+      {isAddStaff && (
+        <Addstaffmodal onClose={() => setIsAddStaff(false)} />
+      )}
       {isLoading ? (
         <div>Loading...</div>
       ) : (
