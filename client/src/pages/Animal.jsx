@@ -3,43 +3,88 @@ import { MdOutlineHealthAndSafety } from "react-icons/md";
 import { FaHeart } from "react-icons/fa6";
 import { IoIosWarning } from "react-icons/io";
 import MetaCard from "../components/animals/MetaCard";
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { TotalAnimalsContext } from "../contexts/all.context";
-import Card from "../components/animals/Card";
+import Card from "../components/animals/Card.jsx";
+import { GET_ANIMALS } from "../apis/local.apis.js";
+import { calculateAnimalHealth } from "../helpers/animal.helpers.js";
 
-const META_ANIMAL_DETAILS = [
-  {
-    count: 5,
-    title: "Total Animals",
-    icon: <FaHeart />,
-    cardStyles: {
-      backgroundColor: "#e6f9ed",
-      color: "#166534",
-    },
-  },
-  {
-    count: 5,
-    title: "Healthy",
-    icon: <MdOutlineHealthAndSafety />,
-    cardStyles: {
-      backgroundColor: "#d1fae5",
-      color: "#065f46",
-    },
-  },
-  {
-    count: 1,
-    title: "Need Attention",
-    icon: <IoIosWarning />,
-    cardStyles: {
-      backgroundColor: "#fff3e6",
-      color: "#b45309",
-    },
-  },
-];
+// const META_ANIMAL_DETAILS = [
+//   {
+//     count: 5,
+//     title: "Total Animals",
+//     icon: <FaHeart />,
+//     cardStyles: {
+//       backgroundColor: "#e6f9ed",
+//       color: "#166534",
+//     },
+//   },
+//   {
+//     count: 5,
+//     title: "Healthy",
+//     icon: <MdOutlineHealthAndSafety />,
+//     cardStyles: {
+//       backgroundColor: "#d1fae5",
+//       color: "#065f46",
+//     },
+//   },
+//   {
+//     count: 1,
+//     title: "Need Attention",
+//     icon: <IoIosWarning />,
+//     cardStyles: {
+//       backgroundColor: "#fff3e6",
+//       color: "#b45309",
+//     },
+//   },
+// ];
 
 const Animal = () => {
   const { animalList, setAnimalList } = use(TotalAnimalsContext);
   const [filteredList, setFilteredList] = useState(animalList);
+  const [isLoading, setIsLoading] = useState(false);
+  const [metaAnimalDetails, setMetaAnimalDetails] = useState([]);
+
+  useEffect(() => {
+    const getAnimalDetails = async () => {
+      setIsLoading(true);
+      let res = await fetch(GET_ANIMALS);
+      res = await res.json();
+      setAnimalList(res.details);
+      setFilteredList(res.details);
+      setMetaAnimalDetails([
+        {
+          count: res.details.length,
+          title: "Total Animals",
+          icon: <FaHeart />,
+          cardStyles: {
+            backgroundColor: "#e6f9ed",
+            color: "#166534",
+          },
+        },
+        {
+          count: calculateAnimalHealth(res.details, "excellent"),
+          title: "Healthy",
+          icon: <MdOutlineHealthAndSafety />,
+          cardStyles: {
+            backgroundColor: "#d1fae5",
+            color: "#065f46",
+          },
+        },
+        {
+          count: calculateAnimalHealth(res.details, "critical"),
+          title: "Need Attention",
+          icon: <IoIosWarning />,
+          cardStyles: {
+            backgroundColor: "#fff3e6",
+            color: "#b45309",
+          },
+        },
+      ]);
+      setIsLoading(false);
+    };
+    if (animalList.length == 0) getAnimalDetails();
+  }, [animalList.length, setAnimalList]);
   return (
     <div className="px-4 w-full ">
       <div className="flex justify-between px-2 py-4">
@@ -58,20 +103,31 @@ const Animal = () => {
       <div className="w-full">
         <SearchFilter componentname={"Animal"} />
       </div>
-      <div className="flex my-6">
-        {META_ANIMAL_DETAILS.map((details) => (
-          <div className="w-1/3 mx-1">
-            <MetaCard details={details} />
+      {isLoading ? (
+        <div className="flex justify-center items-center text-xl">
+          Loading...
+        </div>
+      ) : (
+        <>
+          <div className="flex my-6">
+            {metaAnimalDetails.map((details, index) => (
+              <div key={index} className="w-1/3 mx-1">
+                <MetaCard details={details} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div className="flex flex-wrap my-4">
-        {filteredList.map((details) => (
-          <div key={details.animalName} className="w-[32%] h-[200px] mx-2 my-2">
-            <Card details={details} />
+          <div className="flex flex-wrap my-4">
+            {filteredList.map((details) => (
+              <div
+                key={details.animal_id}
+                className="w-[32%] h-[200px] mx-2 my-2"
+              >
+                <Card details={details} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
     </div>
   );
 };

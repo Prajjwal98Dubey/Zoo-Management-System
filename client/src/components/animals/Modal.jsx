@@ -17,7 +17,7 @@ const Modal = ({ details, onClose }) => {
         }}
       >
         <div className="flex justify-between items-center mb-2">
-          <div className="text-2xl font-semibold">{details.animalName}</div>
+          <div className="text-2xl font-semibold">{details.animal_name}</div>
           <button
             className="border border-gray-200 rounded-md px-4 py-1 bg-[hsl(40,20%,97%)] text-gray-700 font-medium hover:bg-gray-100 transition"
             onClick={onClose}
@@ -43,7 +43,7 @@ const Modal = ({ details, onClose }) => {
                   fontWeight: 500,
                 }}
               >
-                {details.healthStatus}
+                {details.health_status}
               </span>
             </div>
           </div>
@@ -64,7 +64,7 @@ const Modal = ({ details, onClose }) => {
               Last Checkup
             </div>
             <div className="text-base font-normal">
-              {formatDate(details.lastCheckup)}
+              {formatDate(details.last_checkup)}
             </div>
           </div>
         </div>

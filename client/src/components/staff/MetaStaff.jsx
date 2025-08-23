@@ -6,15 +6,15 @@ function MetaStaff() {
   const { staffList } = useContext(TotalStaff);
 
   const totalVets = staffList.reduce(
-    (count, staff) => (staff.role === "veterinarian" ? count + 1 : count),
+    (count, staff) => (staff.staff_profession === "veterinarian" ? count + 1 : count),
     0
   );
   const zookeepers = staffList.reduce(
-    (count, staff) => (staff.role === "zookeeper" ? count + 1 : count),
+    (count, staff) => (staff.staff_profession === "zookeeper" ? count + 1 : count),
     0
   );
   const morningShift = staffList.reduce(
-    (count, staff) => (staff.shift === "morning shift" ? count + 1 : count),
+    (count, staff) => (staff.shiff_time === "morning shift" ? count + 1 : count),
     0
   );
 

@@ -8,7 +8,7 @@ export const getDashboardStats = async (req, res) => {
          FROM animals`
     );
     const animalCount = parseInt(animalCountResult.rows[0].total, 10);
-    const health = parseInt(animalCountResult.rows[0].healthy, 10);
+    const healthy = parseInt(animalCountResult.rows[0].healthy, 10);
 
     const staffCountResult = await zooPool.query(
       `SELECT COUNT(*) AS count FROM staff`
@@ -36,14 +36,20 @@ export const getDashboardStats = async (req, res) => {
        FROM visitors
        WHERE created_at::date = CURRENT_DATE - INTERVAL '1 day'`
     );
-    const presentDayVisitor = parseInt(presentDayVisitorResult.rows[0].count, 10);
-    const previousDayVisitors = parseInt(previousDayVisitorResult.rows[0].count, 10);
+    const presentDayVisitor = parseInt(
+      presentDayVisitorResult.rows[0].count,
+      10
+    );
+    const previousDayVisitors = parseInt(
+      previousDayVisitorResult.rows[0].count,
+      10
+    );
 
     return res.status(200).json({
-      animal: { animalCount, health },
+      animal: { animalCount, healthy },
       staff: { staffCount },
       feedings: { completed, pending },
-      visitors: { presentDayVisitor, previousDayVisitors }
+      visitors: { presentDayVisitor, previousDayVisitors },
     });
   } catch (error) {
     console.log(error);

@@ -11,18 +11,18 @@ function StaffCard({ staff }) {
   };
 
   // default style if role not found
-  const roleClass = roleStyles[staff.role] || "bg-gray-100 text-gray-600";
+  const roleClass = roleStyles[staff.staff_profession] || "bg-gray-100 text-gray-600";
 
   return (
     <div className="w-full max-w-sm rounded-xl bg-white border border-gray-200 shadow-sm shadow-gray-300 p-5 flex flex-col gap-3">
       {/* Top Section */}
       <div className="flex justify-between items-start">
         <div>
-          <h2 className="text-lg font-bold text-gray-900">{staff.name}</h2>
-          <p className="text-sm text-gray-600">{staff.department}</p>
+          <h2 className="text-lg font-bold text-gray-900">{staff.staff_name}</h2>
+          {/* <p className="text-sm text-gray-600">{staff.department}</p> */}
         </div>
         <span className={`px-2 py-1 text-xs rounded-md font-medium ${roleClass}`}>
-          {staff.role}
+          {staff.staff_profession}
         </span>
       </div>
 
@@ -34,24 +34,24 @@ function StaffCard({ staff }) {
         </div>
         <div className="flex items-center gap-2">
           <FaEnvelope className="text-gray-400" />
-          <span>{staff.email}</span>
+          <span>{staff.staff_email}</span>
         </div>
         <div className="flex items-center gap-2">
           <FaCalendarAlt className="text-gray-400" />
-          <span>Hired: {staff.hireDate}</span>
+          <span>Hired: {staff.hired_date}</span>
         </div>
       </div>
 
       {/* Tags */}
       <div className="flex flex-wrap gap-2 mt-2">
-        {staff.shift && (
+        {staff.shiff_time && (
           <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700 font-medium">
-            {staff.shift}
+            {staff.shiff_time}
           </span>
         )}
-        {staff.specialization && (
+        {staff.staff_specialist && (
           <span className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-600 font-medium">
-            {staff.specialization}
+            {staff.staff_specialist}
           </span>
         )}
       </div>

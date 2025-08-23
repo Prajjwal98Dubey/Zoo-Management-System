@@ -47,7 +47,7 @@ const StaffData = [
 ];
 
 export default function TotalStaffDataProvider({children}){
-const [staffList, setStaffList] = useState(StaffData)
+const [staffList, setStaffList] = useState([])
 
 return (
 

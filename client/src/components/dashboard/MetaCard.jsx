@@ -11,9 +11,10 @@ const MetaCard = ({ details }) => {
           {details.title}
         </div>
       </div>
-      <div className="py-2 px-4 w-full h-fit">
-        {details.metaData.map((data) => (
+      <div className="py-2 px-4 w-full h-[250px] overflow-auto">
+        {details.metaData.map((data, index) => (
           <div
+            key={index}
             style={data.cardStyles}
             className="w-full h-fit py-3 my-2 rounded-[15px]"
           >

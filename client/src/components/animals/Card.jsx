@@ -1,12 +1,13 @@
 import { CiCalendar } from "react-icons/ci";
 import { CiLocationOn } from "react-icons/ci";
 import { CiHeart } from "react-icons/ci";
-import { createPortal } from 'react-dom';
+import { createPortal } from "react-dom";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 
 import Modal from "./Modal";
 import { useState } from "react";
+import { formatDateTime } from "../../helpers/animal.helpers";
 
 const healthColors = {
   excellent: "from-green-600 to-green-700 ",
@@ -24,12 +25,8 @@ const categoryEmojis = {
   fish: "🐠",
 };
 
-
-
-
-
 const Card = ({ details }) => {
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false);
   return (
     <div className="shadow-sm w-full h-full px-3 py-2 shadow-gray-300 border border-gray-200 text-sm bg-white rounded-[15px]">
       <div className="flex justify-between pt-3">
@@ -40,14 +37,15 @@ const Card = ({ details }) => {
               : "🫏"}
           </div>
           <div className="flex justify-center items-center px-1 text-lg">
-            {details.animalName}
+            {details.animal_name}
           </div>
         </div>
         <div
-          className={`w-[60px] h-[25px] flex justify-center items-center bg-gradient-to-r ${healthColors[details.healthStatus.toLowerCase()]
-            } rounded-[20px] text-white text-[10px] font-semibold`}
+          className={`w-[60px] h-[25px] flex justify-center items-center bg-gradient-to-r ${
+            healthColors[details.health_status.toLowerCase()]
+          } rounded-[20px] text-white text-[10px] font-semibold`}
         >
-          {details.healthStatus}
+          {details.health_status}
         </div>
       </div>
       <div className="py-1 px-2 text-sm text-gray-500">{details.species}</div>
@@ -64,7 +62,7 @@ const Card = ({ details }) => {
           <div className="px-1 flex justify-center items-center">
             <CiLocationOn />
           </div>
-          <div className="flex justify-normal items-center">
+          <div className="flex justify-normal items-center text-[12px]">
             {details.enclosure}
           </div>
         </div>
@@ -75,7 +73,7 @@ const Card = ({ details }) => {
             <CiHeart />
           </div>
           <div className="flex justify-normal items-center">
-            last checkup: {details.lastCheckup}
+            last checkup: {formatDateTime(details.last_checkup)}
           </div>
         </div>
       </div>
@@ -92,10 +90,16 @@ const Card = ({ details }) => {
               View
             </div>
           </button>
-           {showModal && createPortal(
-        <Modal details={details} onClose={()=> {setShowModal(false)}}/>,
-        document.body
-      )}
+          {showModal &&
+            createPortal(
+              <Modal
+                details={details}
+                onClose={() => {
+                  setShowModal(false);
+                }}
+              />,
+              document.body
+            )}
         </div>
         <div className="w-1/2 px-4">
           <button className="w-full flex bg-green-500 hover:bg-green-600 text-white px-4 py-2 justify-center items-center rounded-[10px]">
