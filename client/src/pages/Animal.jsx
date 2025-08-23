@@ -6,6 +6,8 @@ import { use, useEffect, useState } from "react";
 import { TotalAnimalsContext } from "../contexts/all.context";
 import Card from "../components/animals/Card.jsx";
 import { GET_ANIMALS } from "../apis/local.apis.js";
+import EmptyListCard from "../components/EmptyListCard.jsx";
+import { FaRegHeart } from "react-icons/fa";
 
 const Animal = () => {
   const { animalList, setAnimalList } = use(TotalAnimalsContext);
@@ -126,7 +128,9 @@ const Animal = () => {
             </div>
           </div>
           {filteredList.length == 0 ? (
-            <div>No Animal Found</div>
+            <div className="w-full h-[200px] my-2">
+              <EmptyListCard componentName={"Animals"} icon={<FaRegHeart />} />
+            </div>
           ) : (
             <div className="flex flex-wrap my-4">
               {filteredList.map((details) => (

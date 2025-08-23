@@ -4,6 +4,9 @@ import StaffCard from "../components/staff/StaffCard";
 import { TotalStaff } from "../contexts/all.context";
 import { use, useEffect, useState } from "react";
 import { GET_STAFF } from "../apis/local.apis";
+import { LuUsers } from "react-icons/lu";
+
+import EmptyListCard from "../components/EmptyListCard";
 function StaffList({ list }) {
   return (
     <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-3 px-6">
@@ -52,7 +55,13 @@ const Staff = () => {
       ) : (
         <>
           <MetaStaff list={filteredStaffList}></MetaStaff>
-          <StaffList list={filteredStaffList}></StaffList>
+          {filteredStaffList.length == 0 ? (
+            <div className="w-full h-[200px] my-2 px-4">
+              <EmptyListCard componentName={"Staff"} icon={<LuUsers />} />
+            </div>
+          ) : (
+            <StaffList list={filteredStaffList} />
+          )}
         </>
       )}
     </>
