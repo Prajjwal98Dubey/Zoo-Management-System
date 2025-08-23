@@ -1,6 +1,8 @@
 import { FaPhone, FaEnvelope, FaCalendarAlt } from "react-icons/fa";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
-
+import StaffModal from "./StaffModal";
+import { useState } from "react";
+import { createPortal } from 'react-dom';
 function StaffCard({ staff }) {
   // role → class mapping
   const roleStyles = {
@@ -12,6 +14,8 @@ function StaffCard({ staff }) {
 
   // default style if role not found
   const roleClass = roleStyles[staff.role] || "bg-gray-100 text-gray-600";
+
+  const [modalopen, setmodalopen] = useState(false)
 
   return (
     <div className="w-full max-w-sm rounded-xl bg-white border border-gray-200 shadow-sm shadow-gray-300 p-5 flex flex-col gap-3">
@@ -58,13 +62,20 @@ function StaffCard({ staff }) {
 
       {/* Action Buttons */}
       <div className="flex gap-3 mt-3">
-        <button className="flex-1 rounded-lg border border-gray-300 py-2 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+        <button className="flex-1 rounded-lg border border-gray-300 py-2 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50" onClick={() => { setmodalopen(true) }}>
           <MdOutlineRemoveRedEye className="inline-block mr-1" />
           View Details
         </button>
+
         <button className="flex-1 rounded-lg py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700">
           Edit
         </button>
+        {modalopen &&
+          createPortal(
+            <StaffModal details={staff} onClose={() => setmodalopen(false)} />,
+            document.body
+          )
+        }
       </div>
     </div>
   );

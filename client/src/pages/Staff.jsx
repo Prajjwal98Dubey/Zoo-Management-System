@@ -20,11 +20,24 @@ function StaffList() {
   );
 }
 
+function Header(){
+  return (
+    <>
+    <h1>STAFF DASHBOARD</h1>
+    <button>add staff + </button>
+    
+    
+    </>
+  )
+}
+
+
 
 const Staff = () => {
   
   return (
     <>
+      <Header></Header>
       <SearchFilter componentname={"Staff"} positionClasses='mt-4'></SearchFilter>
       <MetaStaff ></MetaStaff>
       <StaffList></StaffList>
