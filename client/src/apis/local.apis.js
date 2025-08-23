@@ -11,3 +11,7 @@ export const GET_HEALTH_STATS =
 
 export const GET_RECENT_ACTIVITY =
   "http://localhost:5000/api/v1/recent-activity/all";
+
+export const ADD_NEW_ANIMAL = "http://localhost:5000/api/v1/animal/add";
+
+export const ADD_NEW_STAFF = "http://localhost:5000/api/v1/staff/add";
