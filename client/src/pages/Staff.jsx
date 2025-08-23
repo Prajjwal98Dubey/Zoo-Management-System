@@ -15,18 +15,14 @@ function StaffList() {
   );
 }
 
-function Header(){
+function Header() {
   return (
     <>
-    <h1>STAFF DASHBOARD</h1>
-    <button>add staff + </button>
-    
-    
+      <h1>STAFF DASHBOARD</h1>
+      <button>add staff + </button>
     </>
-  )
+  );
 }
-
-
 
 const Staff = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -46,6 +42,7 @@ const Staff = () => {
       <SearchFilter
         componentname={"Staff"}
         positionClasses="mt-4"
+        needFilters={false}
       ></SearchFilter>
       {isLoading ? (
         <div>Loading...</div>
@@ -57,13 +54,5 @@ const Staff = () => {
       )}
     </>
   );
-      <Header></Header>
-      <SearchFilter componentname={"Staff"} positionClasses='mt-4'></SearchFilter>
-      <MetaStaff ></MetaStaff>
-      <StaffList></StaffList>
-
-
-      </>
-      );
 };
 export default Staff;

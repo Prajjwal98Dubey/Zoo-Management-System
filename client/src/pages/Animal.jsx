@@ -9,41 +9,10 @@ import Card from "../components/animals/Card.jsx";
 import { GET_ANIMALS } from "../apis/local.apis.js";
 import { calculateAnimalHealth } from "../helpers/animal.helpers.js";
 
-// const META_ANIMAL_DETAILS = [
-//   {
-//     count: 5,
-//     title: "Total Animals",
-//     icon: <FaHeart />,
-//     cardStyles: {
-//       backgroundColor: "#e6f9ed",
-//       color: "#166534",
-//     },
-//   },
-//   {
-//     count: 5,
-//     title: "Healthy",
-//     icon: <MdOutlineHealthAndSafety />,
-//     cardStyles: {
-//       backgroundColor: "#d1fae5",
-//       color: "#065f46",
-//     },
-//   },
-//   {
-//     count: 1,
-//     title: "Need Attention",
-//     icon: <IoIosWarning />,
-//     cardStyles: {
-//       backgroundColor: "#fff3e6",
-//       color: "#b45309",
-//     },
-//   },
-// ];
-
 const Animal = () => {
   const { animalList, setAnimalList } = use(TotalAnimalsContext);
   const [filteredList, setFilteredList] = useState(animalList);
   const [isLoading, setIsLoading] = useState(false);
-  const [metaAnimalDetails, setMetaAnimalDetails] = useState([]);
 
   useEffect(() => {
     const getAnimalDetails = async () => {
@@ -52,39 +21,11 @@ const Animal = () => {
       res = await res.json();
       setAnimalList(res.details);
       setFilteredList(res.details);
-      setMetaAnimalDetails([
-        {
-          count: res.details.length,
-          title: "Total Animals",
-          icon: <FaHeart />,
-          cardStyles: {
-            backgroundColor: "#e6f9ed",
-            color: "#166534",
-          },
-        },
-        {
-          count: calculateAnimalHealth(res.details, "excellent"),
-          title: "Healthy",
-          icon: <MdOutlineHealthAndSafety />,
-          cardStyles: {
-            backgroundColor: "#d1fae5",
-            color: "#065f46",
-          },
-        },
-        {
-          count: calculateAnimalHealth(res.details, "critical"),
-          title: "Need Attention",
-          icon: <IoIosWarning />,
-          cardStyles: {
-            backgroundColor: "#fff3e6",
-            color: "#b45309",
-          },
-        },
-      ]);
       setIsLoading(false);
     };
     if (animalList.length == 0) getAnimalDetails();
   }, [animalList.length, setAnimalList]);
+
   return (
     <div className="px-4 w-full ">
       <div className="flex justify-between px-2 py-4">
@@ -100,8 +41,13 @@ const Animal = () => {
           </button>
         </div>
       </div>
-      <div className="w-full">
-        <SearchFilter componentname={"Animal"} />
+      <div className="w-ful">
+        <SearchFilter
+          componentname={"Animal"}
+          needFilters={true}
+          setFilteredList={setFilteredList}
+          filteredList={filteredList}
+        />
       </div>
       {isLoading ? (
         <div className="flex justify-center items-center text-xl">
@@ -110,22 +56,91 @@ const Animal = () => {
       ) : (
         <>
           <div className="flex my-6">
-            {metaAnimalDetails.map((details, index) => (
-              <div key={index} className="w-1/3 mx-1">
-                <MetaCard details={details} />
+            <div className="w-1/3 mx-1">
+              <div className="w-full rounded-[15px] bg-white py-4 shadow-sm shadow-gray-300 border border-gray-200">
+                <div className="flex justify-start px-4">
+                  <div
+                    style={{ backgroundColor: "#e6f9ed", color: "#166534" }}
+                    className="text-xl w-fit px-3 py-4 rounded-[10px] flex justify-center items-center"
+                  >
+                    <FaHeart />
+                  </div>
+                  <div className="px-2">
+                    <div className="text-2xl font-semibold">
+                      {filteredList.length}
+                    </div>
+                    <div className="text-gray-500 text-sm font-medium">
+                      Total Animals
+                    </div>
+                  </div>
+                </div>
               </div>
-            ))}
-          </div>
-          <div className="flex flex-wrap my-4">
-            {filteredList.map((details) => (
-              <div
-                key={details.animal_id}
-                className="w-[32%] h-[200px] mx-2 my-2"
-              >
-                <Card details={details} />
+            </div>
+            <div className="w-1/3 mx-1">
+              <div className="w-full rounded-[15px] bg-white py-4 shadow-sm shadow-gray-300 border border-gray-200">
+                <div className="flex justify-start px-4">
+                  <div
+                    style={{ backgroundColor: "#d1fae5", color: "#065f46" }}
+                    className="text-xl w-fit px-3 py-4 rounded-[10px] flex justify-center items-center"
+                  >
+                    <MdOutlineHealthAndSafety />
+                  </div>
+                  <div className="px-2">
+                    <div className="text-2xl font-semibold">
+                      {
+                        filteredList.filter(
+                          (animal) =>
+                            animal.health_status.toLowerCase() == "excellent"
+                        ).length
+                      }
+                    </div>
+                    <div className="text-gray-500 text-sm font-medium">
+                      Healthy
+                    </div>
+                  </div>
+                </div>
               </div>
-            ))}
+            </div>
+            <div className="w-1/3 mx-1">
+              <div className="w-full rounded-[15px] bg-white py-4 shadow-sm shadow-gray-300 border border-gray-200">
+                <div className="flex justify-start px-4">
+                  <div
+                    style={{ backgroundColor: "#fff3e6", color: "#b45309" }}
+                    className="text-xl w-fit px-3 py-4 rounded-[10px] flex justify-center items-center"
+                  >
+                    <IoIosWarning />
+                  </div>
+                  <div className="px-2">
+                    <div className="text-2xl font-semibold">
+                      {
+                        filteredList.filter(
+                          (animal) =>
+                            animal.health_status.toLowerCase() == "critical"
+                        ).length
+                      }
+                    </div>
+                    <div className="text-gray-500 text-sm font-medium">
+                      Need Attention
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+          {filteredList.length == 0 ? (
+            <div>No Animal Found</div>
+          ) : (
+            <div className="flex flex-wrap my-4">
+              {filteredList.map((details) => (
+                <div
+                  key={details.animal_id}
+                  className="w-[32%] h-[200px] mx-2 my-2"
+                >
+                  <Card details={details} />
+                </div>
+              ))}
+            </div>
+          )}
         </>
       )}
     </div>
