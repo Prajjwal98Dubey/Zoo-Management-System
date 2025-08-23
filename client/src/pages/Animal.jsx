@@ -2,12 +2,10 @@ import SearchFilter from "../components/animals/SearchFilter";
 import { MdOutlineHealthAndSafety } from "react-icons/md";
 import { FaHeart } from "react-icons/fa6";
 import { IoIosWarning } from "react-icons/io";
-import MetaCard from "../components/animals/MetaCard";
 import { use, useEffect, useState } from "react";
 import { TotalAnimalsContext } from "../contexts/all.context";
 import Card from "../components/animals/Card.jsx";
 import { GET_ANIMALS } from "../apis/local.apis.js";
-import { calculateAnimalHealth } from "../helpers/animal.helpers.js";
 
 const Animal = () => {
   const { animalList, setAnimalList } = use(TotalAnimalsContext);
@@ -43,10 +41,10 @@ const Animal = () => {
       </div>
       <div className="w-ful">
         <SearchFilter
-          componentname={"Animal"}
+          componentname={"animal by name or species"}
           needFilters={true}
           setFilteredList={setFilteredList}
-          filteredList={filteredList}
+          originalList={animalList}
         />
       </div>
       {isLoading ? (

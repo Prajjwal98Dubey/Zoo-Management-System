@@ -1,27 +1,26 @@
-import { useContext } from "react";
-import { TotalStaff } from "../../contexts/all.context";
 import { FaUsers, FaUserTie, FaUserMd, FaClock } from "react-icons/fa";
 
-function MetaStaff() {
-  const { staffList } = useContext(TotalStaff);
-
-  const totalVets = staffList.reduce(
-    (count, staff) => (staff.staff_profession === "veterinarian" ? count + 1 : count),
+function MetaStaff({ list }) {
+  const totalVets = list.reduce(
+    (count, staff) =>
+      staff.staff_profession === "veterinarian" ? count + 1 : count,
     0
   );
-  const zookeepers = staffList.reduce(
-    (count, staff) => (staff.staff_profession === "zookeeper" ? count + 1 : count),
+  const zookeepers = list.reduce(
+    (count, staff) =>
+      staff.staff_profession === "zookeeper" ? count + 1 : count,
     0
   );
-  const morningShift = staffList.reduce(
-    (count, staff) => (staff.shiff_time === "morning shift" ? count + 1 : count),
+  const morningShift = list.reduce(
+    (count, staff) =>
+      staff.shiff_time === "morning shift" ? count + 1 : count,
     0
   );
 
   const cards = [
     {
       icon: <FaUsers className="text-blue-600" />,
-      count: staffList.length,
+      count: list.length,
       label: "Total Staff",
       bg: "bg-blue-100",
     },
@@ -53,9 +52,7 @@ function MetaStaff() {
           className="w-full rounded-[15px] bg-white py-4 px-6 shadow-sm shadow-gray-300 border border-gray-200 flex items-center gap-3"
         >
           {/* icon */}
-          <div className={`p-3 rounded-lg ${card.bg}`}>
-            {card.icon}
-          </div>
+          <div className={`p-3 rounded-lg ${card.bg}`}>{card.icon}</div>
           {/* text */}
           <div>
             <h1 className="text-2xl font-bold">{card.count}</h1>

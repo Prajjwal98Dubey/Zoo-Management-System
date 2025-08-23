@@ -3,9 +3,9 @@ import { CiFilter } from "react-icons/ci";
 import { IoIosSearch } from "react-icons/io";
 import {
   SelectedAnimalFilter,
-  TotalAnimalsContext,
 } from "../../contexts/all.context";
 import { useEffect } from "react";
+import { useState } from "react";
 
 const ANIMAL_CATEGORY = [
   "all",
@@ -28,29 +28,49 @@ const SearchFilter = ({
   componentname,
   positionClasses,
   needFilters,
-  filteredList,
   setFilteredList,
+  originalList,
 }) => {
   const { filters, setFilters } = use(SelectedAnimalFilter);
-  const { animalList } = use(TotalAnimalsContext);
-
+  const [inpText, setInpText] = useState("");
   useEffect(() => {
+    handleFilters(inpText);
+  }, [filters, needFilters, inpText]);
+
+  const handleFilters = (text) => {
+    let newFilteredList = [];
     if (needFilters) {
-      setFilteredList(
-        animalList.filter(
-          (animal) =>
-            (filters["category"].toLowerCase() == "all"
-              ? animal["category"] != "all"
-              : animal["category"].toLowerCase() ==
-                filters["category"].toLowerCase()) &&
-            (filters["healthStatus"].toLowerCase() == "all"
-              ? animal["health_status"] != "all"
-              : animal["health_status"].toLowerCase() ==
-                filters["healthStatus"].toLowerCase())
-        )
+      newFilteredList = originalList.filter(
+        (animal) =>
+          (filters["category"].toLowerCase() == "all"
+            ? animal["category"] != "all"
+            : animal["category"].toLowerCase() ==
+              filters["category"].toLowerCase()) &&
+          (filters["healthStatus"].toLowerCase() == "all"
+            ? animal["health_status"] != "all"
+            : animal["health_status"].toLowerCase() ==
+              filters["healthStatus"].toLowerCase())
       );
+      if (text.length) {
+        newFilteredList = newFilteredList.filter(
+          (item) =>
+            item.animal_name.toLowerCase().includes(text.toLowerCase()) ||
+            item.species.toLowerCase().includes(text.toLowerCase())
+        );
+      }
+    } else {
+      if (text.length) {
+        newFilteredList = originalList.filter(
+          (item) =>
+            item.staff_name.toLowerCase().includes(text.toLowerCase()) ||
+            item.staff_profession.toLowerCase().includes(text.toLowerCase())
+        );
+      } else {
+        newFilteredList = originalList;
+      }
     }
-  }, [filters, needFilters]);
+    setFilteredList(newFilteredList);
+  };
 
   return (
     <div className={`${positionClasses}`}>
@@ -68,7 +88,11 @@ const SearchFilter = ({
             <IoIosSearch />
           </div>
           <input
-            placeholder={`Search ${componentname} ...`}
+            placeholder={`Search ${componentname.toLowerCase()} ...`}
+            value={inpText}
+            onChange={(e) => {
+              setInpText(e.target.value);
+            }}
             className="w-full bg-[hsl(40,20%,97%)] h-[45px] text-sm rounded-md border border-gray-300 focus:border-green-500 px-8 py-2"
           />
         </div>
