@@ -22,7 +22,7 @@ function Header({ onAddStaff }) {
     <>
       <div className="flex flex-row justify-between items-center px-6 mt-6">
         <div>
-          <h1 className="text-3xl font-semibold">STAFF DASHBOARD</h1>
+          <h1 className="text-3xl font-semibold">Staff Management</h1>
           <div className="text-gray-700 text-sm">
             Manage zoo staff members and their assignments
           </div>

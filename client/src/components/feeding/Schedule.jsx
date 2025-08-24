@@ -1,31 +1,45 @@
+import { getHourTime } from "../../helpers/animal.helpers";
+import { MdAccessTime } from "react-icons/md";
+import { FaCheckCircle } from "react-icons/fa";
 
-
-const Schedule = ({completedFeedings, pendingFeedings}) => {
-
-
-
+const Schedule = ({ completedFeedings, pendingFeedings }) => {
   return (
-    <div className="bg-white shadow rounded-2xl p-6 ">
+    <div className="bg-white shadow rounded-2xl p-6">
       <h2 className="font-bold text-xl">Today's schedule</h2>
       <div className=" flex justify-around overflow-x-auto mt-4 ">
         {pendingFeedings.map((schedule, index) => (
-          <div key={index} className=" min-w-40 schedule-item p-2 bg-orange-100 border border-orange-500 rounded-lg">
-            <p><strong>{schedule.animalName}</strong></p>
-            <p>Time: {schedule.feedingTime}</p>
-            <p>Food: {schedule.food}</p>
-            <div>
-              <p>Status:</p><p className=" bg-red-600 rounded-lg flex justify-center font-bold text-white">Pending</p>
+          <div key={index} className="w-full bg-[#FEFAF3] mx-1 h-[100px]">
+            <div className="flex px-1 justify-start w-full py-2">
+              <div className="text-lg py-1 text-[#F6AA28] flex justify-start px-2 items-center">
+                <MdAccessTime />
+              </div>
+              <div className="text-gray-600 font-semibold text-sm flex justify-center items-center">
+                {getHourTime(schedule.feeding_time)}
+              </div>
+            </div>
+            <div className="w-full px-4 text-[15px]">
+              {schedule.animal_name}
+            </div>
+            <div className="w-full px-4 text-gray-700 text-[11px]">
+              {schedule.diet}
             </div>
           </div>
         ))}
         {completedFeedings.map((schedule, index) => (
-          <div key={index} className="min-w-40 schedule-item p-2 bg-green-100 border border-green-500 rounded-lg">
-            <p><strong>{schedule.animalName}</strong></p>
-            <p>Time: {schedule.feedingTime}</p>
-            <p>Food: {schedule.food}</p>
-            <div>
-              <p>Status: </p>
-              <p className=" bg-green-600 rounded-lg flex justify-center font-bold text-white">Completed</p>
+          <div key={index} className="w-full bg-[#F5FCF5] mx-1 h-[100px]">
+            <div className="flex px-1 justify-start w-full py-2">
+              <div className="text-lg py-1 text-[#7CDE7C] flex justify-start px-2 items-center">
+                <FaCheckCircle />
+              </div>
+              <div className="text-gray-600 font-semibold text-sm flex justify-center items-center">
+                {getHourTime(schedule.feeding_time)}
+              </div>
+            </div>
+            <div className="w-full px-4 text-[15px]">
+              {schedule.animal_name}
+            </div>
+            <div className="w-full px-4 text-gray-700 text-[11px]">
+              {schedule.diet}
             </div>
           </div>
         ))}

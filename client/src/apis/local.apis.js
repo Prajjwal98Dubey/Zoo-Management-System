@@ -15,3 +15,12 @@ export const GET_RECENT_ACTIVITY =
 export const ADD_NEW_ANIMAL = "http://localhost:5000/api/v1/animal/add";
 
 export const ADD_NEW_STAFF = "http://localhost:5000/api/v1/staff/add";
+
+export const UPDATE_FEEDING_COMPLETE =
+  "http://localhost:5000/api/v1/feeding-schedules/update";
+
+export const PENDING_FEEDINGS =
+  "http://localhost:5000/api/v1/feeding-schedules/pending";
+
+export const COMPLETE_FEEDINGS =
+  "http://localhost:5000/api/v1/feeding-schedules/complete";

@@ -123,11 +123,12 @@ export const getPendingFeedingsForToday = async (_, res) => {
       `SELECT 
           fs.animal_name, 
           fs.feeding_time, 
-          a.diet
+          a.diet,
+          fs.staff_name,
+          fs.id
        FROM feeding_schedules fs
        JOIN animals a ON fs.animal_id = a.animal_id
-       WHERE fs.completed = FALSE
-         AND fs.feeding_time::date = CURRENT_DATE`
+       WHERE fs.completed = FALSE`
     );
     return res.status(200).json({ pendingFeedings: result.rows });
   } catch (error) {
@@ -136,3 +137,22 @@ export const getPendingFeedingsForToday = async (_, res) => {
   }
 };
 
+export const getCompletedFeedings = async (_, res) => {
+  try {
+    const result = await zooPool.query(
+      `SELECT 
+          fs.animal_name, 
+          fs.feeding_time, 
+          a.diet,
+          fs.staff_name,
+          fs.id
+       FROM feeding_schedules fs
+       JOIN animals a ON fs.animal_id = a.animal_id
+       WHERE fs.completed = TRUE`
+    );
+    return res.status(200).json({ completedFeedings: result.rows });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Server error." });
+  }
+};

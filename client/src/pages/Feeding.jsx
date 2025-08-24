@@ -1,28 +1,80 @@
-import React, { useContext } from 'react';
-import Metafeeding from '../components/feeding/Metafeeding';
-import Feedinglist from '../components/feeding/Feedinglist';
-import Schedule from '../components/feeding/Schedule';
-import { TotalFeeding } from '../contexts/all.context';
-import { createPortal } from 'react-dom';
-import AddFeedingModal from '../components/feeding/Addfeedingmodal';
-
+import React, { useEffect, useState } from "react";
+import Metafeeding from "../components/feeding/Metafeeding";
+import Feedinglist from "../components/feeding/Feedinglist";
+import Schedule from "../components/feeding/Schedule";
+import AddFeedingModal from "../components/feeding/Addfeedingmodal";
+import { COMPLETE_FEEDINGS, PENDING_FEEDINGS } from "../apis/local.apis";
+import axios from "axios";
 const Feeding = () => {
-  const { pendingFeedings, completedFeedings, markFeedingDone } = useContext(TotalFeeding);
-  const [isAddFeeding, setIsAddFeeding] = React.useState(false);
+  // const [isAddFeeding, setIsAddFeeding] = React.useState(false);
+  const [pendingFeedings, setPendingFeedings] = useState([]);
+  const [completeFeedings, setCompleteFeedings] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    const getFeedingDetails = async () => {
+      setIsLoading(true);
+      let result = await Promise.allSettled([
+        axios.get(PENDING_FEEDINGS),
+        axios.get(COMPLETE_FEEDINGS),
+      ]);
+      /* PENDINGS */
+      setPendingFeedings(
+        result[0].value.data.pendingFeedings.map((feed) => ({
+          ...feed,
+          feedingDone: false,
+        }))
+      );
+
+      /* COMPLETED */
+      setCompleteFeedings(
+        result[1].value.data.completedFeedings.map((feed) => ({
+          ...feed,
+          feedingDone: true,
+        }))
+      );
+      setIsLoading(false);
+    };
+    getFeedingDetails();
+  }, []);
 
   return (
     <div className="">
-      <div className='flex justify-between px-5 py-3'>
-        <h1 className="text-3xl font-bold">Feeding Schedule</h1>
-        <button className="bg-green-600 font-bold hover:bg-green-700 cursor-pointer rounded-md px-3 py-2 text-white text-sm" onClick={() => { setIsAddFeeding(true) }}>
-          + Add Feeding
-        </button>
-        {isAddFeeding && createPortal(<AddFeedingModal onClose={() => { setIsAddFeeding(false) }} />, document.body)}
+      <div className="flex justify-between px-5 py-3">
+        <div>
+          <h1 className="text-3xl font-bold">Feeding Schedule</h1>
+          <div className="text-gray-700 text-sm">
+            Manage daily feeding routines for all animals
+          </div>
+        </div>
+        {/* {isAddFeeding &&
+          createPortal(
+            <AddFeedingModal
+              onClose={() => {
+                setIsAddFeeding(false);
+              }}
+            />,
+            document.body
+          )} */}
       </div>
-      <Metafeeding pendingFeedings={pendingFeedings} completedFeedings={completedFeedings} />
-     
-      <Feedinglist pendingFeedings={pendingFeedings} completedFeedings={completedFeedings} onDone={markFeedingDone} />
-       <Schedule pendingFeedings={pendingFeedings} completedFeedings={completedFeedings} />
+      {!isLoading && (
+        <>
+          <Metafeeding
+            pendingFeedings={pendingFeedings}
+            completedFeedings={completeFeedings}
+          />
+
+          <Feedinglist
+            pendingFeedings={pendingFeedings}
+            completedFeedings={completeFeedings}
+            setPendingFeedings={setPendingFeedings}
+            setCompleteFeedings={setCompleteFeedings}
+          />
+          <Schedule
+            pendingFeedings={pendingFeedings}
+            completedFeedings={completeFeedings}
+          />
+        </>
+      )}
     </div>
   );
 };
