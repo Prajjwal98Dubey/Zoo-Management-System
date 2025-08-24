@@ -1,11 +1,10 @@
 import React from 'react';
 import { FaList, FaCheck, FaClock, FaPercentage } from 'react-icons/fa';
 
-const Metafeeding = ({ data }) => {
-  // Calculate the metrics
-  const totalFeedings = data.length;
-  const completed = data.filter(item => item.feedingDone).length;
-  const pending = data.filter(item => !item.feedingDone).length;
+const Metafeeding = ({ pendingFeedings, completedFeedings }) => {
+  const totalFeedings = pendingFeedings.length + completedFeedings.length;
+  const completed = completedFeedings.length;
+  const pending = pendingFeedings.length;
   const completionRate = totalFeedings > 0 ? Math.round((completed / totalFeedings) * 100) : 0;
 
   return (
@@ -54,7 +53,7 @@ const Metafeeding = ({ data }) => {
             </div>
             <div className="ml-2">
               <p className="text-2xl font-bold">{completionRate}%</p>
-              <p className="text-md text-gray-500">Completion Rate</p>
+              <p className="text-md text-gray-500">Completion percentage</p>
             </div>
           </div>
         </div>

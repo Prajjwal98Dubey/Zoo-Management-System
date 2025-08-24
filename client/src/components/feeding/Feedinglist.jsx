@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { FaCheckCircle, FaClock } from 'react-icons/fa';
 
-const Feedinglist = ({ data }) => {
-  const [feedingList, setFeedingList] = useState(data);
+const Feedinglist = ({ pendingFeedings, completedFeedings, onDone }) => {
 
-  const pendingFeedings = feedingList.filter(item => !item.feedingDone);
-  const completedFeedings = feedingList.filter(item => item.feedingDone);
 
-  function handleadd(animalName) {
-    setFeedingList(prev =>
-      prev.map(item =>
-        item.animalName === animalName && !item.feedingDone
-          ? { ...item, feedingDone: true }
-          : item
-      )
-    );
-  }
+  // const pendingFeedings = feedingList.filter(item => !item.feedingDone);
+  // const completedFeedings = feedingList.filter(item => item.feedingDone);
+
+  // function handleadd(animalName) {
+  //   setFeedingList(prev =>
+  //     prev.map(item =>
+  //       item.animalName === animalName && !item.feedingDone
+  //         ? { ...item, feedingDone: true }
+  //         : item
+  //     )
+  //   );
+  // }
 
   return (
     <div className="flex gap-6 p-4">
@@ -29,7 +29,7 @@ const Feedinglist = ({ data }) => {
           {pendingFeedings.map((item, idx) => (
             <div
               key={idx}
-              onClick={() => handleadd(item.animalName)}
+              onClick={() => onDone(item.animalName)}
               className="cursor-pointer border rounded-lg p-3 bg-orange-50 hover:bg-orange-100 transition"
             >
               <div className="flex justify-between font-semibold text-gray-800">
