@@ -21,12 +21,17 @@ function Header({ onAddStaff }) {
   return (
     <>
       <div className="flex flex-row justify-between items-center px-6 mt-6">
-        <h1 className="font-bold text-2xl">STAFF DASHBOARD</h1>
+        <div>
+          <h1 className="text-3xl font-semibold">STAFF DASHBOARD</h1>
+          <div className="text-gray-700 text-sm">
+            Manage zoo staff members and their assignments
+          </div>
+        </div>
         <button
-          className="bg-green-600 font-bold hover:bg-green-700 cursor-pointer rounded-md px-3 py-2 text-white text-sm"
+          className="bg-green-500 font-semibold  hover:bg-green-600 cursor-pointer rounded-md px-3 py-2 text-white text-sm"
           onClick={onAddStaff}
         >
-          add staff +{" "}
+          + Add New Staff
         </button>
       </div>
     </>

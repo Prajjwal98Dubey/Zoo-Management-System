@@ -40,7 +40,7 @@ const Animal = () => {
         </div>
         <div>
           <button
-            className="bg-green-600 font-bold hover:bg-green-700 cursor-pointer rounded-md px-3 py-2 text-white text-sm"
+            className="bg-green-500 font-semibold hover:bg-green-600 cursor-pointer rounded-md px-3 py-2 text-white text-sm"
             onClick={() => setIsAddAnimal(true)}
           >
             + Add New Animal
@@ -51,8 +51,7 @@ const Animal = () => {
         createPortal(
           <AddanimalModal onClose={() => setIsAddAnimal(false)} />,
           document.body
-        )
-      }
+        )}
       <div className="w-ful" style={{ zIndex: 1 }}>
         <SearchFilter
           componentname={"animal by name or species"}

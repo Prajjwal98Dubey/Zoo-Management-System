@@ -66,13 +66,13 @@ const SideBar = () => {
             } cursor-pointer font-semibold ${
               category.toLowerCase() === field.name.toLowerCase()
                 ? "hover:bg-green-500"
-                : "hover:bg-amber-500"
+                : "hover:bg-amber-300"
             } px-2 my-2 rounded-md flex justify-center items-center py-2 w-full`}
           >
             <div className="px-4 font-extrabold flex justify-end w-1/3 text-lg">
               {field.icon}
             </div>
-            <p className=" w-2/3 flex justify-start">{field.name}</p>
+            <p className=" w-2/3 flex justify-start text-sm font-semibold">{field.name}</p>
           </div>
         </Link>
       ))}

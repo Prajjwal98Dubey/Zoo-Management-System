@@ -5,7 +5,18 @@ import Animal from "./pages/Animal";
 import Staff from "./pages/Staff";
 import Feeding from "./pages/Feeding";
 import { Toaster } from "react-hot-toast";
+import { use, useEffect } from "react";
+import { SelectedCategoryContext } from "./contexts/all.context";
+import Error from "./pages/Error";
 function App() {
+  const { setCategory } = use(SelectedCategoryContext);
+  useEffect(() => {
+    if (location.pathname == "/") {
+      setCategory("dashboard");
+    } else {
+      setCategory(location.pathname.split("/").at(-1));
+    }
+  }, []);
   return (
     <>
       <RouterProvider router={appRouter} />
@@ -36,6 +47,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/feeding",
         element: <Feeding />,
+      },
+      {
+        path: "*",
+        element: <Error />,
       },
     ],
   },
