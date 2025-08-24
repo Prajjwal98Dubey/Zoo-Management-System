@@ -20,8 +20,9 @@ const Feeding = () => {
           {isAddFeeding && createPortal(<AddFeedingModal onClose={()=>{setIsAddFeeding(false)}} />, document.body)}
      </div>
       <Metafeeding data={feedingData} />
+       <Schedule data={feedingData} />
       <Feedinglist data={feedingData} />
-      <Schedule data={feedingData} />
+     
     </div>
   );
 };

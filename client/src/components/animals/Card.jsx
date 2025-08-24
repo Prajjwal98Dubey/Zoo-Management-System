@@ -17,25 +17,67 @@ const healthColors = {
   critical: "from-red-400 to-red-500",
 };
 
-const categoryEmojis = {
-  mammal: "🦁",
-  bird: "🦅",
-  reptile: "🐢",
-  amphibian: "🐸",
-  fish: "🐠",
+const speciesEmojiMap = {
+  "Lion": "🦁",
+  "Elephant": "🐘",
+  "Tiger": "🐅",
+  "Capuchin Monkey": "🐒",
+  "Giant Tortoise": "🐢",
+  "Macaw": "🦜",
+  "Brown Bear": "🐻",
+  "Cheetah": "🐆",
+  "Penguin": "🐧",
+  "Dolphin": "🐬",
+  "Lioness": "🦁",
+  "Rhinoceros": "🦏",
+  "Python": "🐍",
+  "Giraffe": "🦒",
+  "Wolf": "🐺"
 };
 
 const Card = ({ details }) => {
   const [showModal, setShowModal] = useState(false);
+  
+  // Get the appropriate emoji for the animal with case-insensitive lookup
+ // Get the appropriate emoji for the animal with partial word matching
+const getAnimalEmoji = () => {
+  if (!details.species) return null;
+  
+  const speciesLower = details.species.toLowerCase().trim();
+  
+  // First try exact match
+  const exactMatch = Object.keys(speciesEmojiMap).find(key => 
+    key.toLowerCase() === speciesLower
+  );
+  if (exactMatch) return speciesEmojiMap[exactMatch];
+  
+  // Then try partial word matching
+  const partialMatch = Object.keys(speciesEmojiMap).find(mapKey => {
+    const mapWords = mapKey.toLowerCase().split(' ');
+    const speciesWords = speciesLower.split(' ');
+    
+    // Check if any word from the map key exists in the species name
+    return mapWords.some(mapWord => 
+      speciesWords.some(speciesWord => 
+        speciesWord.includes(mapWord) || mapWord.includes(speciesWord)
+      )
+    );
+  });
+  
+  return partialMatch ? speciesEmojiMap[partialMatch] : null;
+};
+
+const animalEmoji = getAnimalEmoji();
+  
   return (
     <div className="shadow-sm w-full h-full px-3 py-2 shadow-gray-300 border border-gray-200 text-sm bg-white rounded-[15px]">
       <div className="flex justify-between pt-3">
         <div className="flex px-2">
-          <div className="rounded-fullflex justify-center items-center text-2xl">
-            {categoryEmojis[details.category.toLowerCase()]
-              ? categoryEmojis[details.category.toLowerCase()]
-              : "🫏"}
-          </div>
+          {animalEmoji && (
+            <div className="w-10 h-10 flex justify-center items-center text-2xl">
+              {animalEmoji}
+            </div>
+          )}
           <div className="flex justify-center items-center px-1 text-lg">
             {details.animal_name}
           </div>
@@ -116,4 +158,4 @@ const Card = ({ details }) => {
   );
 };
 
-export default Card;
+export default Card;1

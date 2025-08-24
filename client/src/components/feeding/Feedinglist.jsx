@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { FaCheckCircle } from 'react-icons/fa';
-import { FaCheck, FaClock } from 'react-icons/fa';
+import { FaCheckCircle, FaClock } from 'react-icons/fa';
 
 const Feedinglist = ({ data }) => {
   const [feedingList, setFeedingList] = useState(data);
@@ -18,46 +17,57 @@ const Feedinglist = ({ data }) => {
     );
   }
 
-
   return (
-    <div className="px-6 flex flex-row justify-center items-center gap-x-8">
-      {/* pending */}
-  <div className='basis-1/2 w-1/2 h-[20rem] bg-white shadow-gray-300 rounded-lg py-7'>
-
-        <div className='flex flex-row gap-3 items-center pl-3'>
-          <FaClock className="text-2xl text-orange-800 " />
-          <h2 className='font-bold text-2xl '>pending</h2>
-        </div>
-        <ul className="mt-4 pl-3 flex flex-col gap-3">
+    <div className="flex gap-6 p-4">
+      {/* Pending Feedings */}
+      <div className="flex-1 bg-white shadow rounded-2xl p-4 h-96">
+        <h2 className="flex items-center text-lg font-semibold text-orange-600 mb-3">
+          <FaClock className="mr-2" />
+          Pending Feedings ({pendingFeedings.length})
+        </h2>
+        <div className="h-[calc(100%-2.5rem)] overflow-y-auto space-y-3 pr-2">
           {pendingFeedings.map((item, idx) => (
-            <li
+            <div
               key={idx}
-              className="py-6  bg-orange-50  border border-orange-500 cursor-pointer hover:bg-orange-100 rounded flex items-center"
               onClick={() => handleadd(item.animalName)}
+              className="cursor-pointer border rounded-lg p-3 bg-orange-50 hover:bg-orange-100 transition"
             >
-              <FaCheckCircle className="text-gray-300 mr-2 transition-colors duration-200" />
-              <span className="font-semibold">{item.animalName}</span> - {item.feedingTime} - {item.food}
-            </li>
+              <div className="flex justify-between font-semibold text-gray-800">
+                {item.animalName}
+                <span className="text-orange-600 border border-orange-400 rounded-full px-2 text-sm">
+                  {item.feedingTime}
+                </span>
+              </div>
+              <div className="text-gray-600 text-sm">{item.food}</div>
+              <div className="text-gray-500 text-xs">By {item.caretaker}</div>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
 
-      {/* done */}
-      <div className='basis-1/2 w-1/2 h-fit bg-white shadow-gray-300 rounded-lg py-7'>
-        <div className='flex flex-row gap-3 items-center pl-3'>
-          <FaCheck className="text-2xl text-green-800  rounded-lg" />
-          <h2 className='font-bold text-2xl  '>completed feeding</h2>
-        </div>
-        <ul className="mt-4 pl-3 flex flex-col gap-3">
+      {/* Completed Feedings */}
+      <div className="flex-1 bg-white shadow rounded-2xl p-4 h-96">
+        <h2 className="flex items-center text-lg font-semibold text-green-600 mb-3">
+          <FaCheckCircle className="mr-2" />
+          Completed Feedings ({completedFeedings.length})
+        </h2>
+        <div className="h-[calc(100%-2.5rem)] overflow-y-auto space-y-3 pr-2">
           {completedFeedings.map((item, idx) => (
-            <li
+            <div
               key={idx}
-              className="py-6 bg-green-50 border border-green-500 hover:bg-green-100 rounded flex items-center"
+              className="border rounded-lg p-3 bg-green-50"
             >
-              <span className="font-semibold">{item.animalName}</span> - {item.feedingTime} - {item.food}
-            </li>
+              <div className="flex justify-between font-semibold text-gray-800">
+                {item.animalName}
+                <span className="text-green-600 bg-green-100 rounded-full px-2 text-sm">
+                  {item.feedingTime}
+                </span>
+              </div>
+              <div className="text-gray-600 text-sm">{item.food}</div>
+              <div className="text-gray-500 text-xs">By {item.caretaker}</div>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   );
