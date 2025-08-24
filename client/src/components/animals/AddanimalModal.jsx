@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { ADD_NEW_ANIMAL } from "../../apis/local.apis";
+import toast from "react-hot-toast";
 
 export default function AnimalModal({ onClose }) {
   const [formData, setFormData] = useState({
@@ -12,17 +14,55 @@ export default function AnimalModal({ onClose }) {
     lastCheckup: "",
     diet: "",
     notes: "",
-    animalImage: "",
   });
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    if (
+      !localStorage.getItem("wild-auth") ||
+      JSON.parse(localStorage.getItem("wild-auth")).userRole.toLowerCase() !==
+        "admin"
+    ) {
+      toast.error("you don't have permission to add staff", {
+        position: "top-center",
+        duration: 1500,
+      });
+      return;
+    }
+    if (
+      !formData.animalName.trim() ||
+      !formData.species.trim() ||
+      !formData.category.trim() ||
+      !formData.age ||
+      isNaN(formData.age) ||
+      !formData.weight ||
+      isNaN(formData.weight) ||
+      !formData.healthStatus.trim() ||
+      !formData.enclosure.trim() ||
+      !formData.lastCheckup.trim() ||
+      !formData.diet.trim() ||
+      !formData.notes.trim()
+    ) {
+      toast.error("Enter all mandatory fields", {
+        position: "top-center",
+        duration: 1500,
+      });
+      return;
+    }
+    await fetch(ADD_NEW_ANIMAL, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+    toast.success("new animal added..", {
+      position: "top-center",
+      duration: 1500,
+    });
     onClose();
   };
 
@@ -36,13 +76,15 @@ export default function AnimalModal({ onClose }) {
         >
           Close
         </button>
-        
+
         <h2 className="text-2xl font-bold mb-8 text-gray-900">Add Animal</h2>
-        
+
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-semibold text-gray-600 mb-2">Animal Name</label>
+              <label className="block text-sm font-semibold text-gray-600 mb-2">
+                Animal Name
+              </label>
               <input
                 type="text"
                 name="animalName"
@@ -54,7 +96,9 @@ export default function AnimalModal({ onClose }) {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-600 mb-2">Species</label>
+              <label className="block text-sm font-semibold text-gray-600 mb-2">
+                Species
+              </label>
               <input
                 type="text"
                 name="species"
@@ -66,7 +110,9 @@ export default function AnimalModal({ onClose }) {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-600 mb-2">Category</label>
+              <label className="block text-sm font-semibold text-gray-600 mb-2">
+                Category
+              </label>
               <select
                 name="category"
                 value={formData.category}
@@ -83,7 +129,9 @@ export default function AnimalModal({ onClose }) {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-600 mb-2">Age</label>
+              <label className="block text-sm font-semibold text-gray-600 mb-2">
+                Age
+              </label>
               <input
                 type="number"
                 name="age"
@@ -95,7 +143,9 @@ export default function AnimalModal({ onClose }) {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-600 mb-2">Weight (kg)</label>
+              <label className="block text-sm font-semibold text-gray-600 mb-2">
+                Weight (kg)
+              </label>
               <input
                 type="number"
                 name="weight"
@@ -107,7 +157,9 @@ export default function AnimalModal({ onClose }) {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-600 mb-2">Health Status</label>
+              <label className="block text-sm font-semibold text-gray-600 mb-2">
+                Health Status
+              </label>
               <select
                 name="healthStatus"
                 value={formData.healthStatus}
@@ -124,7 +176,9 @@ export default function AnimalModal({ onClose }) {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-600 mb-2">Enclosure</label>
+              <label className="block text-sm font-semibold text-gray-600 mb-2">
+                Enclosure
+              </label>
               <input
                 type="text"
                 name="enclosure"
@@ -136,7 +190,9 @@ export default function AnimalModal({ onClose }) {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-600 mb-2">Last Checkup</label>
+              <label className="block text-sm font-semibold text-gray-600 mb-2">
+                Last Checkup
+              </label>
               <input
                 type="date"
                 name="lastCheckup"
@@ -147,7 +203,9 @@ export default function AnimalModal({ onClose }) {
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-gray-600 mb-2">Diet</label>
+              <label className="block text-sm font-semibold text-gray-600 mb-2">
+                Diet
+              </label>
               <input
                 type="text"
                 name="diet"
@@ -157,21 +215,10 @@ export default function AnimalModal({ onClose }) {
                 className="w-full border border-gray-300 p-3 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               />
             </div>
-
             <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-gray-600 mb-2">Animal Image URL</label>
-              <input
-                type="url"
-                name="animalImage"
-                placeholder="Enter image URL (optional)"
-                value={formData.animalImage}
-                onChange={handleChange}
-                className="w-full border border-gray-300 p-3 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-              />
-            </div>
-
-            <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-gray-600 mb-2">Notes</label>
+              <label className="block text-sm font-semibold text-gray-600 mb-2">
+                Notes
+              </label>
               <textarea
                 name="notes"
                 placeholder="Enter any additional notes"
@@ -182,7 +229,6 @@ export default function AnimalModal({ onClose }) {
               />
             </div>
           </div>
-
           <div className="flex justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
             <button
               type="button"

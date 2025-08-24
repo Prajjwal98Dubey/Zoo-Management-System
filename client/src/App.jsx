@@ -4,11 +4,12 @@ import Dashboard from "./pages/Dashboard";
 import Animal from "./pages/Animal";
 import Staff from "./pages/Staff";
 import Feeding from "./pages/Feeding";
-
+import { Toaster } from "react-hot-toast";
 function App() {
   return (
     <>
       <RouterProvider router={appRouter} />
+      <Toaster />
     </>
   );
 }

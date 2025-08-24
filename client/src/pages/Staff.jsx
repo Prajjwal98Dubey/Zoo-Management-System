@@ -6,8 +6,6 @@ import { TotalStaff } from "../contexts/all.context";
 import { use, useEffect, useState } from "react";
 import { GET_STAFF } from "../apis/local.apis";
 import { LuUsers } from "react-icons/lu";
-import React from "react";
-
 import EmptyListCard from "../components/EmptyListCard";
 function StaffList({ list }) {
   return (
@@ -57,16 +55,16 @@ const Staff = () => {
   return (
     <>
       <Header onAddStaff={handleAddStaffClick}></Header>
-      <SearchFilter
-        componentname={"staff by name or profession"}
-        positionClasses="mt-4"
-        needFilters={false}
-        setFilteredList={setFilteredStaffList}
-        originalList={staffList}
-      ></SearchFilter>
-      {isAddStaff && (
-        <Addstaffmodal onClose={() => setIsAddStaff(false)} />
-      )}
+      <div className="px-3">
+        <SearchFilter
+          componentname={"staff by name or profession"}
+          positionClasses="mt-4"
+          needFilters={false}
+          setFilteredList={setFilteredStaffList}
+          originalList={staffList}
+        />
+      </div>
+      {isAddStaff && <Addstaffmodal onClose={() => setIsAddStaff(false)} />}
       {isLoading ? (
         <div>Loading...</div>
       ) : (

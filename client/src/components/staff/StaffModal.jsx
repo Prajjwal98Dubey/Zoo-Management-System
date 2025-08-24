@@ -1,4 +1,5 @@
 import { AiOutlineClose } from "react-icons/ai";
+import { formatDate } from "../../helpers/staff.helpers";
 
 export default function StaffModal({ details, onClose }) {
   if (!details) return null;
@@ -30,12 +31,6 @@ export default function StaffModal({ details, onClose }) {
             </div>
           </div>
           <div>
-            <div className="text-sm text-gray-500 font-medium">Department</div>
-            <div className="text-base font-normal rounded-lg bg-green-50 text-green-700 px-3 py-1 w-fit border border-green-100">
-              {details.department}
-            </div>
-          </div>
-          <div>
             <div className="text-sm text-gray-500 font-medium">
               Specialization
             </div>
@@ -53,17 +48,13 @@ export default function StaffModal({ details, onClose }) {
           </div>
           <div>
             <div className="text-sm text-gray-500 font-medium">Hire Date</div>
-            <div className="text-base font-normal">{details.hired_date}</div>
+            <div className="text-base font-normal">
+              {formatDate(details.hired_date)}
+            </div>
           </div>
           <div>
             <div className="text-sm text-gray-500 font-medium">Shift</div>
             <div className="text-base font-normal">{details.shiff_time}</div>
-          </div>
-          <div>
-            <div className="text-sm text-gray-500 font-medium">Address</div>
-            <div className="text-base font-normal">
-              {details.address || "depression"}
-            </div>
           </div>
         </div>
       </div>
