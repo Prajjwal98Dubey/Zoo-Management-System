@@ -29,16 +29,16 @@ const Feedinglist = ({ pendingFeedings, completedFeedings, onDone }) => {
           {pendingFeedings.map((item, idx) => (
             <div
               key={idx}
-              className="border rounded-lg p-3 bg-orange-50 hover:bg-orange-100  flex flex-row items-center gap-4"
+              className=" h-[7rem] rounded-lg p-3 bg-orange-50 hover:bg-orange-100  flex flex-row items-center gap-4"
             >
-              <div className='w-4 h-4 rounded-full border border-black hover:'>
+              <div className='w-4 h-4 rounded-full border border-green-500 hover:cursor-pointer '>
 
               </div>
-              <div  className='flex justify-between flex-1' onClick={() => onDone(item.animalName)}>
-                <div className="flex  flex-col justify-between font-semibold text-gray-800">
+              <div className='flex justify-between flex-1' onClick={() => onDone(item.animalName)}>
+                <div className="flex  flex-col justify-between font-bold text-gray-800">
                   {item.animalName}
-                  <div className="text-gray-600 text-sm">{item.food}</div>
-                  <div className="text-gray-500 text-xs">By {item.caretaker}</div>
+                  <div className="text-gray-400 text-sm">{item.food}</div>
+                  <div className="text-gray-400 text-xs">By {item.caretaker}</div>
                 </div>
                 <div className=''>
                   <span className="text-orange-600 border border-orange-400 rounded-full px-2 text-sm">
@@ -53,8 +53,8 @@ const Feedinglist = ({ pendingFeedings, completedFeedings, onDone }) => {
       </div>
 
       {/* Completed Feedings */}
-      <div className="flex-1 bg-white shadow rounded-2xl p-4 h-96">
-        <h2 className="flex items-center text-lg font-semibold text-green-600 mb-3">
+      <div className=" flex-1 bg-white shadow rounded-2xl p-4 h-96">
+        <h2 className=" flex items-center text-lg font-semibold text-green-600 mb-3">
           <FaCheckCircle className="mr-2" />
           Completed Feedings ({completedFeedings.length})
         </h2>
@@ -62,16 +62,21 @@ const Feedinglist = ({ pendingFeedings, completedFeedings, onDone }) => {
           {completedFeedings.map((item, idx) => (
             <div
               key={idx}
-              className="border rounded-lg p-3 bg-green-50"
+              className="h-[7rem] rounded-lg p-3 bg-green-50 flex flex-row items-center gap-4"
             >
-              <div className="flex justify-between font-semibold text-gray-800">
-                {item.animalName}
-                <span className="text-green-600 bg-green-100 rounded-full px-2 text-sm">
-                  {item.feedingTime}
-                </span>
+              <div className='w-4 h-4 rounded-full border border-green-500 '></div>
+              <div className='flex justify-between flex-1'>
+                <div className="flex flex-col justify-between font-bold text-gray-800">
+                  {item.animalName}
+                  <div className="text-gray-400 text-sm">{item.food}</div>
+                  <div className="text-gray-400 text-xs">By {item.caretaker}</div>
+                </div>
+                <div>
+                  <span className="text-green-600 bg-green-100 rounded-full px-2 text-sm">
+                    {item.feedingTime}
+                  </span>
+                </div>
               </div>
-              <div className="text-gray-600 text-sm">{item.food}</div>
-              <div className="text-gray-500 text-xs">By {item.caretaker}</div>
             </div>
           ))}
         </div>
