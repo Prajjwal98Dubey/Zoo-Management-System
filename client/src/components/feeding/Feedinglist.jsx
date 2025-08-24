@@ -25,21 +25,32 @@ const Feedinglist = ({ pendingFeedings, completedFeedings, onDone }) => {
           <FaClock className="mr-2" />
           Pending Feedings ({pendingFeedings.length})
         </h2>
-        <div className="h-[calc(100%-2.5rem)] overflow-y-auto space-y-3 pr-2">
+        <div className="h-[calc(100%-2.5rem)] overflow-y-auto space-y-3 pr-2 ">
           {pendingFeedings.map((item, idx) => (
             <div
               key={idx}
-              onClick={() => onDone(item.animalName)}
-              className="cursor-pointer border rounded-lg p-3 bg-orange-50 hover:bg-orange-100 transition"
+              className="border rounded-lg p-3 bg-orange-50 hover:bg-orange-100 "
             >
-              <div className="flex justify-between font-semibold text-gray-800">
-                {item.animalName}
-                <span className="text-orange-600 border border-orange-400 rounded-full px-2 text-sm">
-                  {item.feedingTime}
-                </span>
+              <div>
+                <div className="flex justify-between font-semibold text-gray-800">
+                  {item.animalName}
+                  <span className="text-orange-600 border border-orange-400 rounded-full px-2 text-sm">
+                    {item.feedingTime}
+                  </span>
+                </div>
+                <div className=''>
+                  <div className="text-gray-600 text-sm">{item.food}</div>
+                  <div className="text-gray-500 text-xs">By {item.caretaker}</div>
+                </div>
+                <div>
+                  <button
+                    className='text-sm border border-orange-600 px-2 py-0 bg-gray-50 w-fit rounded-lg cursor-pointer hover:bg-slate-400'
+                    onClick={() => onDone(item.animalName)}
+                  >
+                    mark completed
+                  </button>
+                </div>
               </div>
-              <div className="text-gray-600 text-sm">{item.food}</div>
-              <div className="text-gray-500 text-xs">By {item.caretaker}</div>
             </div>
           ))}
         </div>

@@ -6,7 +6,7 @@ const Metafeeding = ({ pendingFeedings, completedFeedings }) => {
   const completed = completedFeedings.length;
   const pending = pendingFeedings.length;
   const completionRate = totalFeedings > 0 ? Math.round((completed / totalFeedings) * 100) : 0;
-
+  
   return (
     <>
       <div className="flex flex-row space-x-2 py-6 px-5">
