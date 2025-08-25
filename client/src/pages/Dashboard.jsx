@@ -253,6 +253,16 @@ const Dashboard = () => {
         <div className="flex justify-center items-center">Loading...</div>
       ) : (
         <>
+          <div className="w-full h-64 py-2 px-3 relative">
+            <div className="absolute top-16 left-12 text-4xl font-extrabold text-white">
+              Welcome to Zoo Management System
+            </div>
+            <img
+              className="w-full h-full object-cover rounded-lg shadow-md"
+              src="animal.jpg"
+              alt="loading"
+            />
+          </div>
           <div className="flex my-4">
             {metaDashBoardDetails.map((details, index) => (
               <div key={index} className="w-1/4 h-[150px] mx-2">
