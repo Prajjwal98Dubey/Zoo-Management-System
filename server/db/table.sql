@@ -52,3 +52,12 @@ create table recent_activity(
     note varchar(255) not null,
     created_at default current_timestamp
 )
+
+create table users(
+    user_id varchar(255) primary key,
+    user_name varchar(255) unique not null,
+    user_email varchar(255) unique not null,
+    user_password varchar(255) not null,
+    user_role varchar(150) not null default 'other',
+    user_refresh_token varchar(255) not null
+)

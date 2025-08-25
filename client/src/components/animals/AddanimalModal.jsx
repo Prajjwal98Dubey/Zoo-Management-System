@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import { ADD_NEW_ANIMAL } from "../../apis/local.apis";
 import toast from "react-hot-toast";
+import { UserContext } from "../../contexts/all.context";
 
 export default function AnimalModal({ onClose }) {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ export default function AnimalModal({ onClose }) {
     diet: "",
     notes: "",
   });
+  const { user } = use(UserContext);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -22,9 +24,8 @@ export default function AnimalModal({ onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (
-      !localStorage.getItem("wild-auth") ||
-      JSON.parse(localStorage.getItem("wild-auth")).userRole.toLowerCase() !==
-        "admin"
+      Object.keys(user).length == 0 ||
+      user.userRole.toLowerCase() != "manager"
     ) {
       toast.error("you don't have permission to add staff", {
         position: "top-center",

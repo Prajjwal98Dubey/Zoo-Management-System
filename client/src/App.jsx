@@ -6,16 +6,33 @@ import Staff from "./pages/Staff";
 import Feeding from "./pages/Feeding";
 import { Toaster } from "react-hot-toast";
 import { use, useEffect } from "react";
-import { SelectedCategoryContext } from "./contexts/all.context";
+import { SelectedCategoryContext, UserContext } from "./contexts/all.context";
 import Error from "./pages/Error";
+import Auth from "./pages/Auth";
+import { GET_USER_DETAILS } from "./apis/local.apis";
 function App() {
   const { setCategory } = use(SelectedCategoryContext);
+  const { user, setUser } = use(UserContext);
   useEffect(() => {
     if (location.pathname == "/") {
       setCategory("dashboard");
     } else {
       setCategory(location.pathname.split("/").at(-1));
     }
+
+    const getUserDetails = async () => {
+      let res = await fetch(GET_USER_DETAILS, {
+        method: "GET",
+        credentials: "include",
+      });
+      if (res.status == 200) {
+        res = await res.json();
+        setUser(res);
+      }
+      return;
+    };
+
+    if (Object.keys(user).length == 0) getUserDetails();
   }, []);
   return (
     <>
@@ -48,10 +65,14 @@ const appRouter = createBrowserRouter([
         path: "/feeding",
         element: <Feeding />,
       },
-      {
-        path: "*",
-        element: <Error />,
-      },
     ],
+  },
+  {
+    path: "/auth",
+    element: <Auth />,
+  },
+  {
+    path: "*",
+    element: <Error />,
   },
 ]);

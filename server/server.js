@@ -1,19 +1,24 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
 import animalRouter from "./routes/animal.routes.js";
 import staffRouter from "./routes/staff.route.js";
 import visitorRouter from "./routes/visitor.route.js";
 import feedingRouter from "./routes/feeding.route.js";
 import dashboardRouter from "./routes/dashboard.route.js";
 import activityRouter from "./routes/activity.route.js";
+import authRouter from "./routes/auth.route.js";
 
 const app = express();
 
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:5173",
+    credentials: true,
   })
 );
+
+dotenv.config();
 
 app.use(express.json());
 
@@ -34,5 +39,8 @@ app.use("/api/v1/stats", dashboardRouter);
 
 /* RECENT ACTIVITY */
 app.use("/api/v1/recent-activity", activityRouter);
+
+/* AUTH  */
+app.use("/api/v1/auth", authRouter);
 
 app.listen(5000, () => console.log("server listening at 5000"));
