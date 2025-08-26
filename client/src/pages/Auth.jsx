@@ -94,6 +94,34 @@ const Auth = () => {
     navigate("/");
     return;
   };
+  const handleGuestLogin = async (name, password) => {
+    let res = await fetch(LOGIN_USER, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        userCred: name,
+        userPassword: password,
+      }),
+    });
+    if (res.status == 400)
+      return toast.error("Missing Credentials", TOAST_OPTIONS);
+    else if (res.status == 401)
+      return toast.error("Invalid Credentials", TOAST_OPTIONS);
+    res = await res.json();
+    setUser({ ...res });
+    setCategory("dashboard");
+    setFormData({
+      name: "",
+      email: "",
+      password: "",
+      role: "",
+    });
+    navigate("/");
+    return;
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 via-white to-orange-100">
@@ -106,7 +134,6 @@ const Auth = () => {
             Welcome to the Zoo Management System
           </span>
         </div>
-        {/* Slider */}
         <div className="flex mb-8 bg-gray-100 rounded-full p-1 transition-all duration-500">
           <button
             className={`flex-1 py-2 rounded-full text-lg font-semibold transition-all duration-500 ${
@@ -129,7 +156,6 @@ const Auth = () => {
             Signup
           </button>
         </div>
-        {/* Forms */}
         <div className="relative h-72" style={{ minHeight: 280 }}>
           <div
             className={`absolute inset-0 transition-all duration-700 ${
@@ -138,7 +164,6 @@ const Auth = () => {
                 : "opacity-0 -translate-x-10 z-0 pointer-events-none"
             }`}
           >
-            {/* Login Form */}
             <form onSubmit={handleLoginForm} className="flex flex-col gap-4">
               <input
                 type="text"
@@ -229,7 +254,6 @@ const Auth = () => {
             </form>
           </div>
         </div>
-        {/* Switch Prompt */}
         <div className="mt-8 text-center text-gray-500 text-sm">
           {isLogin ? (
             <>
@@ -252,6 +276,20 @@ const Auth = () => {
               </button>
             </>
           )}
+          <div className="flex justify-center items-center text-[11px] text-gray-700 font-semibold py-2">
+            <div
+              onClick={() => handleGuestLogin("guest1", "guest")}
+              className="flex justify-center items-center px-1 cursor-pointer hover:underline"
+            >
+              Guest Login (manager)
+            </div>
+            <div
+              onClick={() => handleGuestLogin("guest2", "guest")}
+              className="flex justify-center items-center px-1 cursor-pointer hover:underline"
+            >
+              Guest Login (zookeeper)
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -116,7 +116,7 @@ const SideBar = () => {
         ) : (
           <div className="w-full flex justify-center items-center py-2 my-1">
             <Link to="/auth">
-              <button className="bg-gradient-to-r from-green-500 to-green-600 text-sm px-6 py-2 rounded-[10px] shadow-md shadow-blue-400 hover:scale-105 transition duration-300 text-white font-semibold">
+              <button className="bg-gradient-to-r from-green-500 to-green-600 text-sm px-6 py-2 rounded-[10px] shadow-md shadow-green-400 hover:scale-105 transition duration-300 text-white font-semibold">
                 Login
               </button>
             </Link>

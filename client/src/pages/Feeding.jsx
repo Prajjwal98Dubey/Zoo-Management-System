@@ -4,9 +4,10 @@ import Feedinglist from "../components/feeding/Feedinglist";
 import Schedule from "../components/feeding/Schedule";
 import AddFeedingModal from "../components/feeding/Addfeedingmodal";
 import { COMPLETE_FEEDINGS, PENDING_FEEDINGS } from "../apis/local.apis";
+import { createPortal } from "react-dom";
 import axios from "axios";
 const Feeding = () => {
-  // const [isAddFeeding, setIsAddFeeding] = React.useState(false);
+  const [isAddFeeding, setIsAddFeeding] = React.useState(false);
   const [pendingFeedings, setPendingFeedings] = useState([]);
   const [completeFeedings, setCompleteFeedings] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,22 +40,31 @@ const Feeding = () => {
 
   return (
     <div className="">
-      <div className="flex justify-between px-5 py-3">
+      <div className="flex justify-between px-5 py-4">
         <div>
           <h1 className="text-3xl font-bold">Feeding Schedule</h1>
           <div className="text-gray-700 text-sm">
             Manage daily feeding routines for all animals
           </div>
         </div>
-        {/* {isAddFeeding &&
+        <div className="flex justify-center items-center px-3">
+          <button
+            onClick={() => setIsAddFeeding(true)}
+            className="text-white font-semibold px-4 py-2 text-sm rounded-md bg-green-500 hover:bg-green-600 cursor-pointer flex justify-center items-center"
+          >
+            + Add Feeding
+          </button>
+        </div>
+        {isAddFeeding &&
           createPortal(
             <AddFeedingModal
               onClose={() => {
                 setIsAddFeeding(false);
               }}
+              setPendingFeedings={setPendingFeedings}
             />,
             document.body
-          )} */}
+          )}
       </div>
       {!isLoading && (
         <>

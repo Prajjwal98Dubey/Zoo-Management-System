@@ -29,3 +29,6 @@ export const LOGIN_USER = "http://localhost:5000/api/v1/auth/login";
 export const REGISTER_USER = "http://localhost:5000/api/v1/auth/register";
 export const LOGOUT_USER = "http://localhost:5000/api/v1/auth/logout";
 export const GET_USER_DETAILS = "http://localhost:5000/api/v1/auth/details";
+
+export const ADD_FEEDINGS =
+  "http://localhost:5000/api/v1/feeding-schedules/create";

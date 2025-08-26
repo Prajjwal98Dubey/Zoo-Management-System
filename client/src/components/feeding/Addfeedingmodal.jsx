@@ -1,90 +1,131 @@
-import { useState } from "react";
+import { use, useState } from "react";
+import {
+  TotalAnimalsContext,
+  TotalStaff,
+  UserContext,
+} from "../../contexts/all.context";
+import toast from "react-hot-toast";
+import { ADD_FEEDINGS } from "../../apis/local.apis";
 
-export default function AddFeedingModal({ onClose }) {
+export default function AddFeedingModal({ onClose, setPendingFeedings }) {
+  const { animalList } = use(TotalAnimalsContext);
+  const { staffList } = use(TotalStaff);
+  const { user } = use(UserContext);
   const [formData, setFormData] = useState({
     animalName: "",
-    feedingDone: "",
     feedingTime: "",
     food: "",
+    amount: "",
+    staffName: "",
   });
-
+  const [foodTypeList, setFoodTypeList] = useState([]);
   const [errors, setErrors] = useState({});
 
-  const animalOptions = [
-    'Lion', 'Elephant', 'Giraffe', 'Tiger', 'Monkey', 'Zebra', 
-    'Bear', 'Hippo', 'Rhinoceros', 'Cheetah', 'Leopard', 'Crocodile'
-  ];
-
-  const feedingTimeOptions = [
-    '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
-    '12:00', '13:00', '14:00', '15:00', '16:00', '17:00',
-    '18:00', '19:00', '20:00'
-  ];
-
   const animalFoodMap = {
-    'Lion': ['Meat', 'Raw Meat', 'Beef', 'Chicken'],
-    'Tiger': ['Meat', 'Raw Meat', 'Beef', 'Chicken'],
-    'Cheetah': ['Meat', 'Raw Meat', 'Beef', 'Chicken'],
-    'Leopard': ['Meat', 'Raw Meat', 'Beef', 'Chicken'],
-    'Bear': ['Fish', 'Meat', 'Fruits', 'Berries', 'Nuts'],
-    'Crocodile': ['Fish', 'Raw Meat', 'Chicken'],
-    'Elephant': ['Fruits', 'Vegetables', 'Hay', 'Leaves', 'Grass'],
-    'Hippo': ['Grass', 'Hay', 'Fruits', 'Vegetables'],
-    'Rhinoceros': ['Grass', 'Hay', 'Leaves', 'Fruits'],
-    'Giraffe': ['Leaves', 'Hay', 'Fruits', 'Vegetables'],
-    'Zebra': ['Grass', 'Hay', 'Vegetables', 'Fruits'],
-    'Monkey': ['Bananas', 'Fruits', 'Nuts', 'Seeds', 'Insects']
+    Lion: ["Meat", "Raw Meat", "Beef", "Chicken"],
+    Tiger: ["Meat", "Raw Meat", "Beef", "Chicken"],
+    Cheetah: ["Meat", "Raw Meat", "Beef", "Chicken"],
+    Leopard: ["Meat", "Raw Meat", "Beef", "Chicken"],
+    Bear: ["Fish", "Meat", "Fruits", "Berries", "Nuts"],
+    Crocodile: ["Fish", "Raw Meat", "Chicken"],
+    Elephant: ["Fruits", "Vegetables", "Hay", "Leaves", "Grass"],
+    Hippo: ["Grass", "Hay", "Fruits", "Vegetables"],
+    Rhinoceros: ["Grass", "Hay", "Leaves", "Fruits"],
+    Giraffe: ["Leaves", "Hay", "Fruits", "Vegetables"],
+    Zebra: ["Grass", "Hay", "Vegetables", "Fruits"],
+    Monkey: ["Bananas", "Fruits", "Nuts", "Seeds", "Insects"],
   };
 
-  const getFoodOptions = (animal) => {
-    return animalFoodMap[animal] || [];
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    // Check all required fields
-    Object.keys(formData).forEach(key => {
-      if (!formData[key].toString().trim()) {
-        newErrors[key] = `${key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')} is required`;
-      }
-    });
-
-    return newErrors;
+  const mapAnimalToFoodType = (animalName) => {
+    let animalSpecies = "";
+    animalSpecies = animalList.filter(
+      (animal) => animal.animal_name.toLowerCase() == animalName.toLowerCase()
+    )?.[0]?.species;
+    let animalToFood = [];
+    Object.keys(animalFoodMap)
+      .filter(
+        (key) =>
+          key.toLowerCase() == animalSpecies.toLowerCase() ||
+          animalSpecies.toLowerCase().includes(key.toLowerCase())
+      )
+      .forEach((animal) => animalToFood.push(...animalFoodMap[animal]));
+    return animalToFood;
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
-    // If animal is changed, reset food selection
-    if (name === 'animalName') {
+    if (name === "animalName") {
       setFormData((prev) => ({ ...prev, [name]: value, food: "" }));
+      setFoodTypeList(mapAnimalToFoodType(e.target.value));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
-    
-    // Clear error for this field when user starts selecting
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const formErrors = validateForm();
-    
-    if (Object.keys(formErrors).length > 0) {
-      setErrors(formErrors);
-      return;
-    }
-    
-    // Convert feedingDone to boolean for consistency
-    const submissionData = {
-      ...formData,
-      feedingDone: formData.feedingDone === 'true'
-    };
-    
-    console.log("Feeding data submitted:", submissionData);
+    if (Object.keys(user).length == 0 || user.userRole != "manager")
+      return toast.error("you are not allowed to add feedings", {
+        position: "top-center",
+        duration: 1500,
+      });
+    if (
+      !formData.animalName ||
+      !formData.feedingTime ||
+      !formData.food ||
+      !formData.amount ||
+      !formData.staffName
+    )
+      return toast.error("enter all mandatory fields");
+    if (Date.now() > new Date(formData.feedingTime).getTime())
+      return toast.error("select a valid date and time", {
+        position: "top-center",
+        duration: 1500,
+      });
+    let staff_id = staffList.filter(
+      (staff) =>
+        staff.staff_name.toLowerCase() == formData.staffName.toLowerCase()
+    )[0].staff_id;
+    let animal_id = animalList.filter(
+      (animal) =>
+        animal.animal_name.toLowerCase() == formData.animalName.toLowerCase()
+    )[0].animal_id;
+    let res = await fetch(ADD_FEEDINGS, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        animal_id,
+        animal_name: formData.animalName,
+        feeding_time: formData.feedingTime,
+        food_type: formData.food,
+        amount: formData.amount,
+        staff_id,
+        staff_name: formData.staffName,
+        notes: "",
+      }),
+    });
+    if (
+      res.status == 204 ||
+      res.status == 400 ||
+      res.status == 500 ||
+      res.status == 403
+    )
+      return toast.error("not allowed", {
+        position: "top-center",
+        duration: 1500,
+      });
+    res = await res.json();
+    setPendingFeedings((prev) => [...prev, { ...res }]);
+    toast.success("feeding added...", {
+      position: "top-center",
+      duration: 1500,
+    });
     onClose();
   };
 
@@ -98,83 +139,123 @@ export default function AddFeedingModal({ onClose }) {
         >
           Close
         </button>
-        
-        <h2 className="text-2xl font-bold mb-8 text-gray-900">Add Feeding Schedule</h2>
-        
+
+        <h2 className="text-2xl font-bold mb-8 text-gray-900">
+          Add Feeding Schedule
+        </h2>
+
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-semibold text-gray-600 mb-2">Animal Name *</label>
+              <label className="block text-sm font-semibold text-gray-600 mb-2">
+                Animal Name *
+              </label>
               <select
                 name="animalName"
                 value={formData.animalName}
                 onChange={handleChange}
                 className={`w-full border p-3 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:border-transparent transition-all ${
-                  errors.animalName ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'
+                  errors.animalName
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300 focus:ring-blue-500"
                 }`}
               >
                 <option value="">Select Animal</option>
-                {animalOptions.map(animal => (
-                  <option key={animal} value={animal}>{animal}</option>
+                {animalList.map((animal) => (
+                  <option key={animal.animal_id} value={animal.animal_name}>
+                    {animal.animal_name}
+                  </option>
                 ))}
               </select>
-              {errors.animalName && <p className="text-red-500 text-sm mt-1">{errors.animalName}</p>}
+              {errors.animalName && (
+                <p className="text-red-500 text-sm mt-1">{errors.animalName}</p>
+              )}
             </div>
-
             <div>
-              <label className="block text-sm font-semibold text-gray-600 mb-2">Feeding Status *</label>
-              <select
-                name="feedingDone"
-                value={formData.feedingDone}
-                onChange={handleChange}
-                className={`w-full border p-3 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:border-transparent transition-all ${
-                  errors.feedingDone ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'
-                }`}
-              >
-                <option value="">Select Status</option>
-                <option value="true">Feeding Done</option>
-                <option value="false">Feeding Pending</option>
-              </select>
-              {errors.feedingDone && <p className="text-red-500 text-sm mt-1">{errors.feedingDone}</p>}
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-600 mb-2">Feeding Time *</label>
-              <select
+              <label className="block text-sm font-semibold text-gray-600 mb-2">
+                Feeding Time *
+              </label>
+              <input
+                type="datetime-local"
+                className="w-full border p-3 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:border-transparent transition-all"
                 name="feedingTime"
                 value={formData.feedingTime}
                 onChange={handleChange}
-                className={`w-full border p-3 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:border-transparent transition-all ${
-                  errors.feedingTime ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'
-                }`}
-              >
-                <option value="">Select Time</option>
-                {feedingTimeOptions.map(time => (
-                  <option key={time} value={time}>{time}</option>
-                ))}
-              </select>
-              {errors.feedingTime && <p className="text-red-500 text-sm mt-1">{errors.feedingTime}</p>}
+              />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-600 mb-2">Food Type *</label>
+              <label className="block text-sm font-semibold text-gray-600 mb-2">
+                Food Type *
+              </label>
               <select
                 name="food"
                 value={formData.food}
                 onChange={handleChange}
                 disabled={!formData.animalName}
                 className={`w-full border p-3 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:border-transparent transition-all ${
-                  !formData.animalName ? 'opacity-50 cursor-not-allowed' : ''
+                  !formData.animalName ? "opacity-50 cursor-not-allowed" : ""
                 } ${
-                  errors.food ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'
+                  errors.food
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300 focus:ring-blue-500"
                 }`}
               >
-                <option value="">{formData.animalName ? 'Select Food' : 'Select Animal First'}</option>
-                {getFoodOptions(formData.animalName).map(food => (
-                  <option key={food} value={food}>{food}</option>
+                <option value="">
+                  {formData.animalName ? "Select Food" : "Select Animal First"}
+                </option>
+                {foodTypeList.map((food) => (
+                  <option key={food} value={food}>
+                    {food}
+                  </option>
                 ))}
               </select>
-              {errors.food && <p className="text-red-500 text-sm mt-1">{errors.food}</p>}
+              {errors.food && (
+                <p className="text-red-500 text-sm mt-1">{errors.food}</p>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-600 mb-2">
+                Amount (in kg) *
+              </label>
+              <input
+                type="number"
+                name="amount"
+                value={formData.amount}
+                onChange={handleChange}
+                className="w-full border p-3 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:border-transparent transition-all"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-600 mb-2">
+                Staff Name *
+              </label>
+              <select
+                name="staffName"
+                // value={formData.staffName}
+                onChange={handleChange}
+                className={`w-full border p-3 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:border-transparent transition-all 
+                } ${
+                  errors.food
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300 focus:ring-blue-500"
+                }`}
+              >
+                <option value="">Select Staff</option>
+                {staffList
+                  .filter(
+                    (staff) =>
+                      staff.staff_profession.toLowerCase() == "zookeeper"
+                  )
+                  .map((s) => (
+                    <option key={s.staff_id} value={s.staff_name}>
+                      {s.staff_name}
+                    </option>
+                  ))}
+              </select>
+              {errors.food && (
+                <p className="text-red-500 text-sm mt-1">{errors.food}</p>
+              )}
             </div>
           </div>
 

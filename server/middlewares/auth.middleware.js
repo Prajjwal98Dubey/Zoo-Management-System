@@ -15,5 +15,6 @@ export const authMiddleware = async (req, res, next) => {
   if (!decodedToken)
     return res.status(400).json({ message: "user not authenticated" });
   req.userId = decodedToken.user_id;
+  req.token = decodedToken;
   next();
 };

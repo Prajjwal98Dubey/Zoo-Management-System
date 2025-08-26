@@ -31,8 +31,7 @@ export const addFeedingSchedule = async (req, res) => {
     !food_type ||
     !amount ||
     !staff_id ||
-    !staff_name ||
-    notes === undefined
+    !staff_name
   ) {
     return res.status(400).json({ error: "Missing required fields." });
   }
@@ -56,7 +55,9 @@ export const addFeedingSchedule = async (req, res) => {
         notes,
       ]
     );
-    return res.status(201).json({ message: "Feeding schedule added." });
+    return res
+      .status(201)
+      .json({ id, animal_name, feeding_time, diet: food_type, staff_name });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Server error." });
