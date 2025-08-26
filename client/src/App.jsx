@@ -6,13 +6,21 @@ import Staff from "./pages/Staff";
 import Feeding from "./pages/Feeding";
 import { Toaster } from "react-hot-toast";
 import { use, useEffect } from "react";
-import { SelectedCategoryContext, UserContext } from "./contexts/all.context";
+import {
+  SelectedCategoryContext,
+  TotalAnimalsContext,
+  TotalStaff,
+  UserContext,
+} from "./contexts/all.context";
 import Error from "./pages/Error";
 import Auth from "./pages/Auth";
-import { GET_USER_DETAILS } from "./apis/local.apis";
+import { GET_ANIMALS, GET_STAFF, GET_USER_DETAILS } from "./apis/local.apis";
+import axios from "axios";
 function App() {
   const { setCategory } = use(SelectedCategoryContext);
   const { user, setUser } = use(UserContext);
+  const { setAnimalList } = use(TotalAnimalsContext);
+  const { setStaffList } = use(TotalStaff);
   useEffect(() => {
     if (location.pathname == "/") {
       setCategory("dashboard");
@@ -31,8 +39,16 @@ function App() {
       }
       return;
     };
-
+    const getAllAnimalsAndStaff = async () => {
+      let res = await Promise.allSettled([
+        axios.get(GET_ANIMALS),
+        axios.get(GET_STAFF),
+      ]);
+      setAnimalList([...res[0].value.data.details]);
+      setStaffList([...res[1].value.data.staff]);
+    };
     if (Object.keys(user).length == 0) getUserDetails();
+    getAllAnimalsAndStaff();
   }, []);
   return (
     <>

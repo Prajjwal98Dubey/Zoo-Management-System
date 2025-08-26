@@ -18,57 +18,58 @@ const healthColors = {
 };
 
 const speciesEmojiMap = {
-  "Lion": "🦁",
-  "Elephant": "🐘",
-  "Tiger": "🐅",
+  Lion: "🦁",
+  Elephant: "🐘",
+  Tiger: "🐅",
   "Capuchin Monkey": "🐒",
   "Giant Tortoise": "🐢",
-  "Macaw": "🦜",
+  Macaw: "🦜",
   "Brown Bear": "🐻",
-  "Cheetah": "🐆",
-  "Penguin": "🐧",
-  "Dolphin": "🐬",
-  "Lioness": "🦁",
-  "Rhinoceros": "🦏",
-  "Python": "🐍",
-  "Giraffe": "🦒",
-  "Wolf": "🐺"
+  Cheetah: "🐆",
+  Penguin: "🐧",
+  Dolphin: "🐬",
+  Lioness: "🦁",
+  Rhinoceros: "🦏",
+  Python: "🐍",
+  Giraffe: "🦒",
+  Wolf: "🐺",
 };
 
 const Card = ({ details }) => {
   const [showModal, setShowModal] = useState(false);
-  
-  // Get the appropriate emoji for the animal with case-insensitive lookup
- // Get the appropriate emoji for the animal with partial word matching
-const getAnimalEmoji = () => {
-  if (!details.species) return null;
-  
-  const speciesLower = details.species.toLowerCase().trim();
-  
-  // First try exact match
-  const exactMatch = Object.keys(speciesEmojiMap).find(key => 
-    key.toLowerCase() === speciesLower
-  );
-  if (exactMatch) return speciesEmojiMap[exactMatch];
-  
-  // Then try partial word matching
-  const partialMatch = Object.keys(speciesEmojiMap).find(mapKey => {
-    const mapWords = mapKey.toLowerCase().split(' ');
-    const speciesWords = speciesLower.split(' ');
-    
-    // Check if any word from the map key exists in the species name
-    return mapWords.some(mapWord => 
-      speciesWords.some(speciesWord => 
-        speciesWord.includes(mapWord) || mapWord.includes(speciesWord)
-      )
-    );
-  });
-  
-  return partialMatch ? speciesEmojiMap[partialMatch] : null;
-};
 
-const animalEmoji = getAnimalEmoji();
-  
+  // Get the appropriate emoji for the animal with case-insensitive lookup
+  // Get the appropriate emoji for the animal with partial word matching
+  const getAnimalEmoji = () => {
+    if (!details.species) return null;
+
+    const speciesLower = details.species.toLowerCase().trim();
+
+    // First try exact match
+    const exactMatch = Object.keys(speciesEmojiMap).find(
+      (key) => key.toLowerCase() === speciesLower
+    );
+    if (exactMatch) return speciesEmojiMap[exactMatch];
+
+    // Then try partial word matching
+    const partialMatch = Object.keys(speciesEmojiMap).find((mapKey) => {
+      const mapWords = mapKey.toLowerCase().split(" ");
+      const speciesWords = speciesLower.split(" ");
+
+      // Check if any word from the map key exists in the species name
+      return mapWords.some((mapWord) =>
+        speciesWords.some(
+          (speciesWord) =>
+            speciesWord.includes(mapWord) || mapWord.includes(speciesWord)
+        )
+      );
+    });
+
+    return partialMatch ? speciesEmojiMap[partialMatch] : null;
+  };
+
+  const animalEmoji = getAnimalEmoji();
+
   return (
     <div className="shadow-sm w-full h-full px-3 py-2 shadow-gray-300 border border-gray-200 text-sm bg-white rounded-[15px]">
       <div className="flex justify-between pt-3">
@@ -120,10 +121,10 @@ const animalEmoji = getAnimalEmoji();
         </div>
       </div>
       <div className="flex justify-center py-3">
-        <div className="w-1/2 px-4">
+        <div className="w-full px-4 ">
           <button
             onClick={() => setShowModal(true)}
-            className="w-full flex bg-[hsl(40,20%,97%)] px-4 py-2 justify-center items-center rounded-[10px] hover:bg-amber-400"
+            className="w-full flex bg-[hsl(40,20%,97%)] px-4 py-2 justify-center items-center rounded-[10px] hover:bg-amber-200"
           >
             <div className="flex justify-center items-center text-lg px-1">
               <MdOutlineRemoveRedEye />
@@ -143,7 +144,7 @@ const animalEmoji = getAnimalEmoji();
               document.body
             )}
         </div>
-        <div className="w-1/2 px-4">
+        {/* <div className="w-1/2 px-4">
           <button className="w-full flex bg-green-500 hover:bg-green-600 text-white px-4 py-2 justify-center items-center rounded-[10px]">
             <div className="flex justify-center items-center text-lg px-1">
               <FaRegEdit />
@@ -152,10 +153,11 @@ const animalEmoji = getAnimalEmoji();
               Edit
             </div>
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );
 };
 
-export default Card;1
+export default Card;
+1;

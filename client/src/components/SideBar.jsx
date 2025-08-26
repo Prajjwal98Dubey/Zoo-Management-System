@@ -59,7 +59,7 @@ const SideBar = () => {
     }
   };
   return (
-    <div className="w-full shadow-lg shadow-gray-400 min-h-screen px-2 relative">
+    <div className="w-full shadow-xl shadow-gray-400 min-h-screen px-2 relative">
       <div className="text-xl font-bold text-[#313131] font-mono flex justify-center items-center py-6">
         <div className="px-3 text-white bg-green-700 py-3 rounded-[30px]">
           <BsTreeFill />
@@ -77,7 +77,7 @@ const SideBar = () => {
             } cursor-pointer font-semibold ${
               category.toLowerCase() === field.name.toLowerCase()
                 ? "hover:bg-green-500"
-                : "hover:bg-amber-300"
+                : "hover:bg-amber-200"
             } px-2 my-2 rounded-md flex justify-center items-center py-2 w-full`}
           >
             <div className="px-4 font-extrabold flex justify-end w-1/3 text-lg">

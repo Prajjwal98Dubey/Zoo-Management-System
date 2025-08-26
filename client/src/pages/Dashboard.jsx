@@ -4,7 +4,6 @@ import { FaRegCalendar } from "react-icons/fa6";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { GoAlertFill } from "react-icons/go";
-import { IoMdTrendingUp } from "react-icons/io";
 import InitialCard from "../components/dashboard/InitialCard";
 import MetaCard from "../components/dashboard/MetaCard";
 import ActivityCard from "../components/dashboard/ActivityCard";
@@ -17,129 +16,15 @@ import {
 } from "../apis/local.apis";
 import axios from "axios";
 import { createTimeString, getHourTime } from "../helpers/animal.helpers";
-const DASHBOARD_DETAILS = [
-  {
-    title: "Total Animals",
-    icon: <FaRegHeart />,
-    cardStyles: {
-      backgroundColor: "#e6f9ed",
-      color: "#166534",
-    },
-    metaData: {
-      count: 5,
-      message: "4 healthy",
-      color: "text-green-400",
-    },
-  },
-  {
-    title: "Staff Members",
-    icon: <FiUsers />,
-    cardStyles: {
-      backgroundColor: "#e6f0fa",
-      color: "#1e3a8a",
-    },
-    metaData: {
-      count: 5,
-      message: "on duty",
-      color: "text-gray-400",
-    },
-  },
-  {
-    title: "Today's Feedings",
-    icon: <FaRegCalendar />,
-    cardStyles: {
-      backgroundColor: "#fffbe6",
-      color: "#92400e",
-    },
-    metaData: {
-      count: "2/4",
-      message: "2 pending",
-      color: "text-green-400",
-    },
-  },
-  {
-    title: "Today's Visitors",
-    icon: <MdOutlineRemoveRedEye />,
-    cardStyles: {
-      backgroundColor: "#fff3e6",
-      color: "#9a3412",
-    },
-    metaData: {
-      count: 342,
-      message: "12% increase from yesterday",
-      color: "text-green-400",
-    },
-  },
-];
-
-const META_DASHBOARD_DETAILS = [
-  {
-    title: "Pending Feedings",
-    icon: <FaRegCalendarAlt />,
-    metaData: [
-      {
-        animalName: "Ruby",
-        tag: "10:00",
-        message: "Seeds & fruits",
-        cardStyles: {
-          backgroundColor: "#f3f4f6",
-          tagColor: "#fb923c",
-        },
-      },
-      {
-        animalName: "Max",
-        tag: "11:00",
-        message: "Raw Meat",
-        cardStyles: {
-          backgroundColor: "#f3f4f6",
-          tagColor: "#fb923c",
-        },
-      },
-    ],
-  },
-  {
-    title: "Health Alerts",
-    icon: <GoAlertFill />,
-    metaData: [
-      {
-        animalName: "Charlie",
-        message: "Green Sea Turtle - Marine Habitat",
-        tag: "fair",
-        cardStyles: {
-          backgroundColor: "#FDF5E6",
-          tagColor: "#F29D61",
-        },
-      },
-    ],
-  },
-];
-
-const RECENT_ACTITVITY_DETAILS = [
-  {
-    title: "Recent Activity",
-    icon: <IoMdTrendingUp />,
-    messages: [
-      {
-        message: "Leo the African Lion completed morning feeding",
-        time: "2 hours ago", // will change once backend will send a exact time string
-      },
-      {
-        message: "Dr. Sarah Johnson completed health checkup for Bella",
-        time: "4 hours ago",
-      },
-      {
-        message: "New animal Max arrived at Big Cat Habitat 2",
-        time: "1 day ago",
-      },
-    ],
-  },
-];
+import { createPortal } from "react-dom";
+import AddActivityModal from "../components/dashboard/AddActivityModal";
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [metaDashBoardDetails, setMetaDashBoardDetails] = useState([]);
   const [feedingsAndHealthCheck, setFeedingsAndHealthCheck] = useState([]);
   const [recentActivity, setRecentActivity] = useState([]);
+  const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
   useEffect(() => {
     const getAllDashboardStats = async () => {
       setIsLoading(true);
@@ -255,7 +140,15 @@ const Dashboard = () => {
         <>
           <div className="w-full h-64 py-2 px-3 relative">
             <div className="absolute top-16 left-12 text-4xl font-extrabold text-white">
-              Welcome to Zoo Management System
+              <div>Welcome to Zoo Management System</div>
+              <div className="mt-[10px]">
+                <button
+                  onClick={() => setIsActivityModalOpen(true)}
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 cursor-pointer text-sm font-semibold rounded-md"
+                >
+                  + Add an Activity
+                </button>
+              </div>
             </div>
             <img
               className="w-full h-full object-cover rounded-lg shadow-md"
@@ -263,6 +156,14 @@ const Dashboard = () => {
               alt="loading"
             />
           </div>
+          {isActivityModalOpen &&
+            createPortal(
+              <AddActivityModal
+                onClose={() => setIsActivityModalOpen(false)}
+                setRecentActivity={setRecentActivity}
+              />,
+              document.body
+            )}
           <div className="flex my-4">
             {metaDashBoardDetails.map((details, index) => (
               <div key={index} className="w-1/4 h-[150px] mx-2">

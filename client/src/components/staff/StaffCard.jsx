@@ -61,8 +61,6 @@ function StaffCard({ staff }) {
           </span>
         )}
       </div>
-
-      {/* Action Buttons */}
       <div className="flex gap-3 mt-3">
         <button
           className="flex-1 rounded-lg border border-gray-300 py-2 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
@@ -74,9 +72,6 @@ function StaffCard({ staff }) {
           View Details
         </button>
 
-        <button className="flex-1 rounded-lg py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700">
-          Edit
-        </button>
         {modalopen &&
           createPortal(
             <StaffModal details={staff} onClose={() => setmodalopen(false)} />,

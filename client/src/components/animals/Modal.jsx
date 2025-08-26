@@ -82,20 +82,22 @@ const Modal = ({ details, onClose }) => {
             {details.diet}
           </div>
         </div>
-        <div>
-          <div className="text-sm text-gray-500 font-medium mb-1">Notes</div>
-          <div
-            className="rounded-md px-3 py-2 text-base"
-            style={{
-              backgroundColor: "#e6f9ed",
-              color: "#166534",
-              fontWeight: 500,
-              width: "fit-content",
-            }}
-          >
-            {details.notes}
+        {details.notes.length > 0 && (
+          <div>
+            <div className="text-sm text-gray-500 font-medium mb-1">Notes</div>
+            <div
+              className="rounded-md px-3 py-2 text-base"
+              style={{
+                backgroundColor: "#e6f9ed",
+                color: "#166534",
+                fontWeight: 500,
+                width: "fit-content",
+              }}
+            >
+              {details.notes}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

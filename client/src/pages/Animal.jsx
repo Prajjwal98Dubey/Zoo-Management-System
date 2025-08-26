@@ -49,7 +49,10 @@ const Animal = () => {
       </div>
       {isAddAnimal &&
         createPortal(
-          <AddanimalModal onClose={() => setIsAddAnimal(false)} />,
+          <AddanimalModal
+            onClose={() => setIsAddAnimal(false)}
+            setFilteredList={setFilteredList}
+          />,
           document.body
         )}
       <div className="w-ful" style={{ zIndex: 1 }}>
@@ -146,7 +149,7 @@ const Animal = () => {
             <div className="flex flex-wrap my-4">
               {filteredList.map((details) => (
                 <div
-                  key={details.animal_id}
+                  key={details.animal_name}
                   className="w-[32%] h-[200px] mx-2 my-2"
                 >
                   <Card details={details} />

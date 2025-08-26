@@ -69,7 +69,12 @@ const Staff = () => {
           originalList={staffList}
         />
       </div>
-      {isAddStaff && <Addstaffmodal onClose={() => setIsAddStaff(false)} />}
+      {isAddStaff && (
+        <Addstaffmodal
+          onClose={() => setIsAddStaff(false)}
+          setFilteredStaffList={setFilteredStaffList}
+        />
+      )}
       {isLoading ? (
         <div>Loading...</div>
       ) : (

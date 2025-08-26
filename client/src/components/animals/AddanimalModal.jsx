@@ -1,9 +1,8 @@
 import { use, useState } from "react";
 import { ADD_NEW_ANIMAL } from "../../apis/local.apis";
 import toast from "react-hot-toast";
-import { UserContext } from "../../contexts/all.context";
-
-export default function AnimalModal({ onClose }) {
+import { TotalAnimalsContext, UserContext } from "../../contexts/all.context";
+export default function AnimalModal({ onClose, setFilteredList }) {
   const [formData, setFormData] = useState({
     animalName: "",
     species: "",
@@ -17,6 +16,7 @@ export default function AnimalModal({ onClose }) {
     notes: "",
   });
   const { user } = use(UserContext);
+  const { setAnimalList } = use(TotalAnimalsContext);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -64,11 +64,41 @@ export default function AnimalModal({ onClose }) {
       position: "top-center",
       duration: 1500,
     });
+    setAnimalList((prev) => [
+      {
+        animal_name: formData.animalName,
+        health_status: formData.healthStatus,
+        species: formData.species,
+        age: formData.age,
+        enclosure: formData.enclosure,
+        last_checkup: formData.lastCheckup,
+        weight: formData.weight,
+        diet: formData.diet,
+        notes: formData.notes,
+        category: formData.category,
+      },
+      ...prev,
+    ]);
+    setFilteredList((prev) => [
+      {
+        animal_name: formData.animalName,
+        health_status: formData.healthStatus,
+        species: formData.species,
+        age: formData.age,
+        enclosure: formData.enclosure,
+        last_checkup: formData.lastCheckup,
+        weight: formData.weight,
+        diet: formData.diet,
+        notes: formData.notes,
+        category: formData.category,
+      },
+      ...prev,
+    ]);
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50">
       <div className="bg-white bg-opacity-95 backdrop-blur-md p-8 rounded-2xl max-w-2xl w-full max-h-[85vh] shadow-2xl overflow-y-auto relative border border-gray-200">
         <button
           type="button"

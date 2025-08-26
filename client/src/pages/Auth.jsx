@@ -1,4 +1,4 @@
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { LOGIN_USER, REGISTER_USER } from "../apis/local.apis";
 import { SelectedCategoryContext, UserContext } from "../contexts/all.context";
@@ -16,9 +16,15 @@ const Auth = () => {
     password: "",
     role: "",
   });
-  const { setUser } = use(UserContext);
+  const { user, setUser } = use(UserContext);
   const { setCategory } = use(SelectedCategoryContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (Object.keys(user).length) {
+      navigate("/");
+    }
+  }, [navigate, user]);
 
   const handleFormData = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));

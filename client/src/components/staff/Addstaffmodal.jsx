@@ -1,9 +1,9 @@
 import { use, useState } from "react";
 import { ADD_NEW_STAFF } from "../../apis/local.apis";
 import toast from "react-hot-toast";
-import { UserContext } from "../../contexts/all.context";
+import { TotalStaff, UserContext } from "../../contexts/all.context";
 
-export default function StaffModal({ onClose }) {
+export default function StaffModal({ onClose, setFilteredStaffList }) {
   const [formData, setFormData] = useState({
     staffName: "",
     phone: "",
@@ -14,6 +14,7 @@ export default function StaffModal({ onClose }) {
     staffSpecialist: "",
   });
   const { user } = use(UserContext);
+  const { setStaffList } = use(TotalStaff);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,16 +59,40 @@ export default function StaffModal({ onClose }) {
       },
       body: JSON.stringify(formData),
     });
+    setFilteredStaffList((prev) => [
+      {
+        staff_name: formData.staffName,
+        staff_profession: formData.staffProfession,
+        phone: formData.phone,
+        staff_email: formData.staffEmail,
+        hired_date: formData.hiredDate,
+        shiff_time: formData.shiffTime,
+        staff_specialist: formData.staffSpecialist,
+      },
+      ...prev,
+    ]);
+    setStaffList((prev) => [
+      {
+        staff_name: formData.staffName,
+        staff_profession: formData.staffProfession,
+        phone: formData.phone,
+        staff_email: formData.staffEmail,
+        hired_date: formData.hiredDate,
+        shiff_time: formData.shiffTime,
+        staff_specialist: formData.staffSpecialist,
+      },
+      ...prev,
+    ]);
+
     toast.success("new staff added", {
       position: "top-center",
       duration: 1500,
     });
-    console.log("Form submitted:", formData);
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50">
       <div className="bg-white bg-opacity-95 backdrop-blur-md p-8 rounded-2xl max-w-2xl w-full max-h-[85vh] shadow-2xl overflow-y-auto relative border border-gray-200">
         <button
           type="button"

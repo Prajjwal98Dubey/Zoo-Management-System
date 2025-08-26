@@ -17,15 +17,13 @@ export const getDashboardStats = async (req, res) => {
 
     const feedingResult = await zooPool.query(
       `SELECT 
-          SUM(CASE WHEN completed = TRUE THEN 1 ELSE 0 END) AS completed,
-          SUM(CASE WHEN completed = FALSE THEN 1 ELSE 0 END) AS pending
-       FROM feeding_schedules
-       WHERE feeding_time::date = CURRENT_DATE`
+      SUM(CASE WHEN completed = TRUE THEN 1 ELSE 0 END) AS completed,
+      SUM(CASE WHEN completed = FALSE THEN 1 ELSE 0 END) AS pending
+          FROM feeding_schedules;`
     );
     const completed = parseInt(feedingResult.rows[0].completed, 10) || 0;
     const pending = parseInt(feedingResult.rows[0].pending, 10) || 0;
 
-    // 4. Visitors today and yesterday
     const presentDayVisitorResult = await zooPool.query(
       `SELECT COALESCE(SUM(number_of_tickets), 0) AS count
        FROM visitors
