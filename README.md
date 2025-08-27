@@ -2,6 +2,9 @@
 
 A modern web application for managing zoo operations, including animal records, staff management, feeding schedules, and more.
 
+## 🎬 Demo
+[![Demo1](https://img.shields.io/badge/📹_Demo1-Watch_Now-red?style=for-the-badge&logo=youtube)](https://drive.google.com/file/d/1Z386hsQuibTdl_0Dgec50P9VcYLT4bk7/view?usp=sharing)
+
 ## Features
 
 - 🦁 **Animal Management:** Add, edit, and view animal details, health status, and feeding history.
@@ -17,6 +20,3 @@ A modern web application for managing zoo operations, including animal records, 
 - **Routing:** React Router
 - **Icons:** react-icons
 - **Backend:** node.js, express.js, pg
-
-## 🎬 Demo
-[![Demo1](https://img.shields.io/badge/📹_Demo1-Watch_Now-red?style=for-the-badge&logo=youtube)](https://drive.google.com/file/d/1Z386hsQuibTdl_0Dgec50P9VcYLT4bk7/view?usp=sharing)
